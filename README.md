@@ -21,7 +21,7 @@ A simple and user-friendly web page to calculate grades for first and second yea
 
 ---
 
-## Screenshots
+## Screenshot
 
 ![Screenshot 1](eba424b7-4c55-4b94-8f15-a50239c935bb.png)
 
