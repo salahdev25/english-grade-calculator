@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Grade Calculator for 1st & 2nd Year LMD</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Vue 3 CDN -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin-top: 20px;
+      flex: 1;
+    }
+
+    .custom-border-gray {
+      border-color: #6c757d !important;
+      /* Bootstrap's secondary color */
+    }
+
+    table {
+      width: 100%;
+      margin-bottom: 20px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    th,
+    td {
+      padding: 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #343a40;
+      color: #000000;
+      /* Black text for column titles */
+    }
+
+    .unit-1 {
+      background-color: #e3f2fd;
+      /* Light blue */
+    }
+
+    .unit-2 {
+      background-color: #fff3e0;
+      /* Light orange */
+    }
+
+    .unit-3 {
+      background-color: #e8f5e9;
+      /* Light green */
+    }
+
+    .unit-4 {
+      background-color: #f5f5f5;
+      /* Light gray */
+    }
+
+    input {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .result {
+      margin-top: 10px;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+      color: #343a40;
+    }
+
+    .checkbox-label {
+      font-size: 0.9em;
+      margin-left: 5px;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: #ffffff;
+      text-align: center;
+      padding: 15px 0;
+      margin-top: auto;
+    }
+
+    footer a {
+      color: #ffc107;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Mobile-friendly adjustments */
+    @media (max-width: 768px) {
+
+      h1 {
+        font-size: 1.4rem;
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+
+      h4 {
+        font-size: 1.1rem;
+      }
+
+      .weighting-select select {
+        width: 100%;
+        margin-top: 5px;
+      }
+
+      .result {
+        font-size: 1rem;
+      }
+
+      th,
+      td {
+        font-size: 12px;
+        padding: 6px;
+      }
+
+      input {
+        font-size: 12px;
+        padding: 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div class="container">
+      <h1 class="text-center">University Mohamed Khider Biskra</h1>
+      <h3 class="text-center">Department of English Language and Literature</h3>
+      <h4 class="text-center">Grade Calculator for 1st & 2nd Year LMD</h4>
+
+      <!-- Weighting selection -->
+      <div class="weighting-select text-center mt-4 mb-3">
+        <label for="weighting">Evaluation Mode :&nbsp</label>
+        <select id="weighting" v-model="weighting" class="form-select d-inline-block w-auto">
+          <option value="40-60">40% TD - 60% Exam</option>
+          <option value="50-50">50% TD - 50% Exam</option>
+        </select>
+      </div>
+
+      <!-- Language selection -->
+      <div class="language-select text-center mt-3 mb-3">
+        <label for="language">Module Names :&nbsp</label>
+        <select id="language" v-model="language" class="form-select d-inline-block w-auto">
+          <option value="en">English</option>
+          <option value="fr">Français</option>
+        </select>
+      </div>
+
+      <!-- Notes Card -->
+      <div class="card custom-border-gray mt-3 mb-4"> <!-- Custom gray border -->
+        <div class="card-header bg-secondary text-white d-flex align-items-center">
+          <i class="bi bi-info-circle me-2"></i> <!-- Icon -->
+          <h5 class="card-title mb-0">Important Notes</h5> <!-- Title -->
+        </div>
+        <div class="card-body"> <!-- Custom light silver background -->
+          <p class="card-text">
+            <i class="bi bi-quote me-2"></i>To exclude a module you haven’t studied, check the box next to it.
+          </p>
+          <p class="card-text">
+            <i class="bi bi-quote me-2"></i>For modules that do not have an exam, insert the same TD grade.
+          </p>
+        </div>
+      </div>
+
+      <!-- Table for input fields -->
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Module</th>
+              <th>Coef</th>
+              <th>TD Grade</th>
+              <th>Exam Grade</th>
+              <th>Module Grade</th>
+              <th>Unit Grade</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Unit 1: Study Skills, Reading, ICT -->
+            <tr class="unit-1">
+              <td><input type="checkbox" v-model="studySkillsExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.studySkills }}</td>
+              <td>2</td>
+              <td><input type="number" v-model="studySkillsTD" min="0" max="20" placeholder="0-20"
+                  :disabled="studySkillsExcluded"></td>
+              <td><input type="number" v-model="studySkillsExam" min="0" max="20" placeholder="0-20"
+                  :disabled="studySkillsExcluded"></td>
+              <td>{{ studySkillsModuleGrade.toFixed(2) }}</td>
+              <td rowspan="3">{{ unit1Grade.toFixed(2) }}</td>
+            </tr>
+            <tr class="unit-1">
+              <td><input type="checkbox" v-model="readingExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.reading }}</td>
+              <td>2</td>
+              <td><input type="number" v-model="readingTD" min="0" max="20" placeholder="0-20"
+                  :disabled="readingExcluded"></td>
+              <td><input type="number" v-model="readingExam" min="0" max="20" placeholder="0-20"
+                  :disabled="readingExcluded"></td>
+              <td>{{ readingModuleGrade.toFixed(2) }}</td>
+            </tr>
+            <tr class="unit-1">
+              <td><input type="checkbox" v-model="ictExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.ict }}</td>
+              <td>1</td>
+              <td><input type="number" v-model="ictTD" min="0" max="20" placeholder="0-20" :disabled="ictExcluded">
+              </td>
+              <td><input type="number" v-model="ictExam" min="0" max="20" placeholder="0-20" :disabled="ictExcluded">
+              </td>
+              <td>{{ ictModuleGrade.toFixed(2) }}</td>
+            </tr>
+            <!-- Unit 2: Listening & Speaking, Writing -->
+            <tr class="unit-2">
+              <td><input type="checkbox" v-model="listeningSpeakingExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.listeningSpeaking }}</td>
+              <td>2</td>
+              <td><input type="number" v-model="listeningSpeakingTD" min="0" max="20" placeholder="0-20"
+                  :disabled="listeningSpeakingExcluded"></td>
+              <td><input type="number" v-model="listeningSpeakingExam" min="0" max="20" placeholder="0-20"
+                  :disabled="listeningSpeakingExcluded"></td>
+              <td>{{ listeningSpeakingModuleGrade.toFixed(2) }}</td>
+              <td rowspan="2">{{ unit2Grade.toFixed(2) }}</td>
+            </tr>
+            <tr class="unit-2">
+              <td><input type="checkbox" v-model="writingExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.writing }}</td>
+              <td>2</td>
+              <td><input type="number" v-model="writingTD" min="0" max="20" placeholder="0-20"
+                  :disabled="writingExcluded"></td>
+              <td><input type="number" v-model="writingExam" min="0" max="20" placeholder="0-20"
+                  :disabled="writingExcluded"></td>
+              <td>{{ writingModuleGrade.toFixed(2) }}</td>
+            </tr>
+            <!-- Unit 3: Linguistics & Phonetics, Grammar -->
+            <tr class="unit-3">
+              <td><input type="checkbox" v-model="linguisticsPhoneticsExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.linguisticsPhonetics }}</td>
+              <td>2</td>
+              <td><input type="number" v-model="linguisticsPhoneticsTD" min="0" max="20" placeholder="0-20"
+                  :disabled="linguisticsPhoneticsExcluded"></td>
+              <td><input type="number" v-model="linguisticsPhoneticsExam" min="0" max="20" placeholder="0-20"
+                  :disabled="linguisticsPhoneticsExcluded"></td>
+              <td>{{ linguisticsPhoneticsModuleGrade.toFixed(2) }}</td>
+              <td rowspan="2">{{ unit3Grade.toFixed(2) }}</td>
+            </tr>
+            <tr class="unit-3">
+              <td><input type="checkbox" v-model="grammarExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.grammar }}</td>
+              <td>2</td>
+              <td><input type="number" v-model="grammarTD" min="0" max="20" placeholder="0-20"
+                  :disabled="grammarExcluded"></td>
+              <td><input type="number" v-model="grammarExam" min="0" max="20" placeholder="0-20"
+                  :disabled="grammarExcluded"></td>
+              <td>{{ grammarModuleGrade.toFixed(2) }}</td>
+            </tr>
+            <!-- Unit 4: Civilisation of the language (Individual) -->
+            <tr class="unit-4">
+              <td><input type="checkbox" v-model="civilisationExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.civilisation }}</td>
+              <td>2</td>
+              <td><input type="number" v-model="civilisationTD" min="0" max="20" placeholder="0-20"
+                  :disabled="civilisationExcluded"></td>
+              <td><input type="number" v-model="civilisationExam" min="0" max="20" placeholder="0-20"
+                  :disabled="civilisationExcluded"></td>
+              <td>{{ civilisationModuleGrade.toFixed(2) }}</td>
+              <td>{{ unit4Grade.toFixed(2) }}</td>
+            </tr>
+            <!-- Unit 5: Literary Texts (Individual) -->
+            <tr class="unit-4">
+              <td><input type="checkbox" v-model="literaryTextsExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.literaryTexts }}</td>
+              <td>1</td>
+              <td><input type="number" v-model="literaryTextsTD" min="0" max="20" placeholder="0-20"
+                  :disabled="literaryTextsExcluded"></td>
+              <td><input type="number" v-model="literaryTextsExam" min="0" max="20" placeholder="0-20"
+                  :disabled="literaryTextsExcluded"></td>
+              <td>{{ literaryTextsModuleGrade.toFixed(2) }}</td>
+              <td>{{ unit5Grade.toFixed(2) }}</td>
+            </tr>
+            <!-- Unit 6: Foreign Language (Individual) -->
+            <tr class="unit-4">
+              <td><input type="checkbox" v-model="foreignLanguageExcluded" class="form-check-input"></td>
+              <td>{{ moduleNames.foreignLanguage }}</td>
+              <td>1</td>
+              <td><input type="number" v-model="foreignLanguageTD" min="0" max="20" placeholder="0-20"
+                  :disabled="foreignLanguageExcluded"></td>
+              <td><input type="number" v-model="foreignLanguageExam" min="0" max="20" placeholder="0-20"
+                  :disabled="foreignLanguageExcluded"></td>
+              <td>{{ foreignLanguageModuleGrade.toFixed(2) }}</td>
+              <td>{{ unit6Grade.toFixed(2) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Result display -->
+      <div class="result">
+        <p>Your overall grade is: <strong>{{ overallGrade.toFixed(2) }}</strong></p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white pt-1">
+      <div class="container text-center">
+        <p class="mb-0">
+          &copy; {{ currentYear }} - Designed with ❤️ by <a href="https://t.me/SalahDev" target="_blank"
+            class="text-warning text-decoration-none">Salah Dev</a>
+        </p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Vue 3 Script -->
+  <script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        // Language state
+        const language = ref('en'); // 'en' for English, 'fr' for French
+
+        // Toggle language function
+        const toggleLanguage = () => {
+          language.value = language.value === 'en' ? 'fr' : 'en';
+        };
+
+        const currentYear = computed(() => new Date().getFullYear());
+
+        // Module names based on language
+        const moduleNames = computed(() => {
+          if (language.value === 'en') {
+            return {
+              studySkills: 'Study Skills',
+              reading: 'Reading',
+              ict: 'ICT',
+              listeningSpeaking: 'Listening & Speaking',
+              writing: 'Writing',
+              linguisticsPhonetics: 'Linguistics & Phonetics',
+              grammar: 'Grammar',
+              civilisation: 'Civilisation of the language',
+              literaryTexts: 'Literary Texts',
+              foreignLanguage: 'Foreign Language',
+            };
+          } else {
+            return {
+              studySkills: 'Techniques du travail universitaire',
+              reading: 'Lecture et étude de textes',
+              ict: 'TIC et e-Learning',
+              listeningSpeaking: 'Compréhension et expression orales',
+              writing: 'Compréhension et expression écrites',
+              linguisticsPhonetics: 'Linguistique et phonétique',
+              grammar: 'Grammaire',
+              civilisation: 'Civilisations de la langue',
+              literaryTexts: 'Etude de textes littéraires',
+              foreignLanguage: 'Langue étrangère',
+            };
+          }
+        });
+
+        // Weighting selection
+        const weighting = ref('40-60');
+
+        // Module grades (TD and Exam)
+        const studySkillsTD = ref('');
+        const studySkillsExam = ref('');
+        const studySkillsExcluded = ref(false);
+
+        const readingTD = ref('');
+        const readingExam = ref('');
+        const readingExcluded = ref(false);
+
+        const ictTD = ref('');
+        const ictExam = ref('');
+        const ictExcluded = ref(false);
+
+        const listeningSpeakingTD = ref('');
+        const listeningSpeakingExam = ref('');
+        const listeningSpeakingExcluded = ref(false);
+
+        const writingTD = ref('');
+        const writingExam = ref('');
+        const writingExcluded = ref(false);
+
+        const linguisticsPhoneticsTD = ref('');
+        const linguisticsPhoneticsExam = ref('');
+        const linguisticsPhoneticsExcluded = ref(false);
+
+        const grammarTD = ref('');
+        const grammarExam = ref('');
+        const grammarExcluded = ref(false);
+
+        const civilisationTD = ref('');
+        const civilisationExam = ref('');
+        const civilisationExcluded = ref(false);
+
+        const literaryTextsTD = ref('');
+        const literaryTextsExam = ref('');
+        const literaryTextsExcluded = ref(false);
+
+        const foreignLanguageTD = ref('');
+        const foreignLanguageExam = ref('');
+        const foreignLanguageExcluded = ref(false);
+
+        // Coefficients
+        const coefficients = {
+          studySkills: 2,
+          reading: 2,
+          ict: 1,
+          listeningSpeaking: 2,
+          writing: 2,
+          linguisticsPhonetics: 2,
+          grammar: 2,
+          civilisation: 2,
+          literaryTexts: 1,
+          foreignLanguage: 1,
+        };
+
+        // Helper function to calculate module grade
+        const calculateModuleGrade = (td, exam, Excluded) => {
+          if (Excluded) return 0; // Exclude if not studied
+          const tdWeight = weighting.value === '40-60' ? 0.4 : 0.5;
+          const examWeight = weighting.value === '40-60' ? 0.6 : 0.5;
+          return (td * tdWeight) + (exam * examWeight);
+        };
+
+        // Module grades (computed)
+        const studySkillsModuleGrade = computed(() => calculateModuleGrade(studySkillsTD.value, studySkillsExam.value, studySkillsExcluded.value));
+        const readingModuleGrade = computed(() => calculateModuleGrade(readingTD.value, readingExam.value, readingExcluded.value));
+        const ictModuleGrade = computed(() => calculateModuleGrade(ictTD.value, ictExam.value, ictExcluded.value));
+        const listeningSpeakingModuleGrade = computed(() => calculateModuleGrade(listeningSpeakingTD.value, listeningSpeakingExam.value, listeningSpeakingExcluded.value));
+        const writingModuleGrade = computed(() => calculateModuleGrade(writingTD.value, writingExam.value, writingExcluded.value));
+        const linguisticsPhoneticsModuleGrade = computed(() => calculateModuleGrade(linguisticsPhoneticsTD.value, linguisticsPhoneticsExam.value, linguisticsPhoneticsExcluded.value));
+        const grammarModuleGrade = computed(() => calculateModuleGrade(grammarTD.value, grammarExam.value, grammarExcluded.value));
+        const civilisationModuleGrade = computed(() => calculateModuleGrade(civilisationTD.value, civilisationExam.value, civilisationExcluded.value));
+        const literaryTextsModuleGrade = computed(() => calculateModuleGrade(literaryTextsTD.value, literaryTextsExam.value, literaryTextsExcluded.value));
+        const foreignLanguageModuleGrade = computed(() => calculateModuleGrade(foreignLanguageTD.value, foreignLanguageExam.value, foreignLanguageExcluded.value));
+
+        // Unit grades (computed)
+        const unit1Grade = computed(() => {
+          let total = 0, totalCoef = 0;
+
+          if (!studySkillsExcluded.value) {
+            total += studySkillsModuleGrade.value * coefficients.studySkills;
+            totalCoef += coefficients.studySkills;
+          }
+
+          if (!readingExcluded.value) {
+            total += readingModuleGrade.value * coefficients.reading;
+            totalCoef += coefficients.reading;
+          }
+
+          if (!ictExcluded.value) {
+            total += ictModuleGrade.value * coefficients.ict;
+            totalCoef += coefficients.ict;
+          }
+
+          return totalCoef > 0 ? total / totalCoef : 0; // Prevent division by zero
+        });
+
+        const unit2Grade = computed(() => {
+          let total = 0, totalCoef = 0;
+
+          if (!listeningSpeakingExcluded.value) {
+            total += listeningSpeakingModuleGrade.value * coefficients.listeningSpeaking;
+            totalCoef += coefficients.listeningSpeaking;
+          }
+
+          if (!writingExcluded.value) {
+            total += writingModuleGrade.value * coefficients.writing;
+            totalCoef += coefficients.writing;
+          }
+
+          return totalCoef > 0 ? total / totalCoef : 0;
+        });
+
+        const unit3Grade = computed(() => {
+          let total = 0, totalCoef = 0;
+
+          if (!linguisticsPhoneticsExcluded.value) {
+            total += linguisticsPhoneticsModuleGrade.value * coefficients.linguisticsPhonetics;
+            totalCoef += coefficients.linguisticsPhonetics;
+          }
+
+          if (!grammarExcluded.value) {
+            total += grammarModuleGrade.value * coefficients.grammar;
+            totalCoef += coefficients.grammar;
+          }
+
+          return totalCoef > 0 ? total / totalCoef : 0;
+        });
+
+        const unit4Grade = computed(() => !civilisationExcluded.value ? civilisationModuleGrade.value : 0);
+        const unit5Grade = computed(() => !literaryTextsExcluded.value ? literaryTextsModuleGrade.value : 0);
+        const unit6Grade = computed(() => !foreignLanguageExcluded.value ? foreignLanguageModuleGrade.value : 0);
+
+        // Overall grade (computed)
+        const overallGrade = computed(() => {
+          let total = 0, totalCoef = 0;
+
+          if (!studySkillsExcluded.value) {
+            total += studySkillsModuleGrade.value * coefficients.studySkills;
+            totalCoef += coefficients.studySkills;
+          }
+
+          if (!readingExcluded.value) {
+            total += readingModuleGrade.value * coefficients.reading;
+            totalCoef += coefficients.reading;
+          }
+
+          if (!ictExcluded.value) {
+            total += ictModuleGrade.value * coefficients.ict;
+            totalCoef += coefficients.ict;
+          }
+
+          if (!listeningSpeakingExcluded.value) {
+            total += listeningSpeakingModuleGrade.value * coefficients.listeningSpeaking;
+            totalCoef += coefficients.listeningSpeaking;
+          }
+
+          if (!writingExcluded.value) {
+            total += writingModuleGrade.value * coefficients.writing;
+            totalCoef += coefficients.writing;
+          }
+
+          if (!linguisticsPhoneticsExcluded.value) {
+            total += linguisticsPhoneticsModuleGrade.value * coefficients.linguisticsPhonetics;
+            totalCoef += coefficients.linguisticsPhonetics;
+          }
+
+          if (!grammarExcluded.value) {
+            total += grammarModuleGrade.value * coefficients.grammar;
+            totalCoef += coefficients.grammar;
+          }
+
+          if (!civilisationExcluded.value) {
+            total += civilisationModuleGrade.value * coefficients.civilisation;
+            totalCoef += coefficients.civilisation;
+          }
+
+          if (!literaryTextsExcluded.value) {
+            total += literaryTextsModuleGrade.value * coefficients.literaryTexts;
+            totalCoef += coefficients.literaryTexts;
+          }
+
+          if (!foreignLanguageExcluded.value) {
+            total += foreignLanguageModuleGrade.value * coefficients.foreignLanguage;
+            totalCoef += coefficients.foreignLanguage;
+          }
+
+          return totalCoef > 0 ? total / totalCoef : 0;
+        });
+
+        return {
+          language,
+          toggleLanguage,
+          moduleNames,
+          weighting,
+          studySkillsTD,
+          studySkillsExam,
+          studySkillsExcluded,
+          readingTD,
+          readingExam,
+          readingExcluded,
+          ictTD,
+          ictExam,
+          ictExcluded,
+          listeningSpeakingTD,
+          listeningSpeakingExam,
+          listeningSpeakingExcluded,
+          writingTD,
+          writingExam,
+          writingExcluded,
+          linguisticsPhoneticsTD,
+          linguisticsPhoneticsExam,
+          linguisticsPhoneticsExcluded,
+          grammarTD,
+          grammarExam,
+          grammarExcluded,
+          civilisationTD,
+          civilisationExam,
+          civilisationExcluded,
+          literaryTextsTD,
+          literaryTextsExam,
+          literaryTextsExcluded,
+          foreignLanguageTD,
+          foreignLanguageExam,
+          foreignLanguageExcluded,
+          studySkillsModuleGrade,
+          readingModuleGrade,
+          ictModuleGrade,
+          listeningSpeakingModuleGrade,
+          writingModuleGrade,
+          linguisticsPhoneticsModuleGrade,
+          grammarModuleGrade,
+          civilisationModuleGrade,
+          literaryTextsModuleGrade,
+          foreignLanguageModuleGrade,
+          unit1Grade,
+          unit2Grade,
+          unit3Grade,
+          unit4Grade,
+          unit5Grade,
+          unit6Grade,
+          overallGrade,
+          currentYear,
+        };
+      },
+    }).mount('#app');
+  </script>
+</body>
+
+</html>
