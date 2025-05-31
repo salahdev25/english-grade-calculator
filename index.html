@@ -110,13 +110,10 @@
     .form-select {
       border: 2px solid var(--border-color);
       border-radius: 8px;
-      /* Updated padding for desktop: more space on the right for the arrow */
       padding: 0.75rem 2.5rem 0.75rem 1rem; /* top, right, bottom, left */
       font-size: 0.95rem;
       transition: var(--transition);
       background-color: white;
-      /* Bootstrap's default .form-select CSS will provide the arrow image and basic positioning.
-         Our padding ensures text doesn't overlap it. */
     }
 
     .form-select:focus {
@@ -157,24 +154,15 @@
       text-align: center;
       vertical-align: middle;
       border-color: var(--border-color);
+      transition: background-color 0.3s ease, opacity 0.3s ease; /* Smooth transitions */
     }
 
-    /* Unit Colors */
-    .unit-1 {
-      background-color: rgba(102, 126, 234, 0.08);
-    }
+    /* Unit Colors - applied to TR elements */
+    .unit-1 { background-color: rgba(102, 126, 234, 0.08); }
+    .unit-2 { background-color: rgba(118, 75, 162, 0.08); }
+    .unit-3 { background-color: rgba(240, 147, 251, 0.08); }
+    .unit-4 { background-color: rgba(78, 205, 196, 0.08);  }
 
-    .unit-2 {
-      background-color: rgba(118, 75, 162, 0.08);
-    }
-
-    .unit-3 {
-      background-color: rgba(240, 147, 251, 0.08);
-    }
-
-    .unit-4 {
-      background-color: rgba(78, 205, 196, 0.08);
-    }
 
     /* Input Styles */
     .form-control {
@@ -194,9 +182,8 @@
     }
 
     .form-control:disabled {
-      background-color: #f8f9fa;
-      opacity: 0.6;
-      cursor: not-allowed;
+      background-color: #f8f9fa; 
+      /* Inputs will also be affected by cell opacity if their parent cell is dimmed */
     }
 
     /* Toggle Styles */
@@ -246,7 +233,7 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
 
-    input:checked + .slider {
+    input:checked + .slider { 
       background: linear-gradient(135deg, var(--danger-color), #ff5252);
     }
 
@@ -291,30 +278,47 @@
       transform: scale(1.1);
     }
 
-    .exam-toggle.disabled {
-      color: #cbd5e0;
-      cursor: not-allowed;
-      opacity: 0.5;
+    .exam-toggle.disabled { 
+      color: #cbd5e0 !important; 
+      cursor: not-allowed !important;
+      opacity: 0.5 !important; /* Keep opacity for the button itself */
+      background-color: transparent !important;
+      transform: none !important;
     }
 
-    .exam-toggle.disabled:hover {
-      background-color: transparent;
-      transform: none;
-    }
-
-    .exam-toggle.active {
+    .exam-toggle.active { 
       background-color: rgba(255, 107, 107, 0.1);
       color: var(--danger-color);
     }
 
     /* Disabled Row Styling */
-    .disabled-row {
-      opacity: 0.5;
+    /* .disabled-row { Opacity removed from here } */
+
+    /* Apply opacity AND specific tint to data/input cells (1-6) within ANY disabled row */
+    .disabled-row td:nth-child(1), /* Status */
+    .disabled-row td:nth-child(2), /* Module */
+    .disabled-row td:nth-child(3), /* Coef */
+    .disabled-row td:nth-child(4), /* TD Grade */
+    .disabled-row td:nth-child(5), /* Exam Grade */
+    .disabled-row td:nth-child(6)  /* Module Grade */ {
+      background-color: rgba(231, 76, 60, 0.1) !important; /* Light red tint */
+      opacity: 0.6; /* Apply opacity directly to these cells */
+    }
+    
+    /* For SINGLE-MODULE units (those using .unit-4 class for tr styling),
+       when their row is disabled, also tint and dim their Unit Grade cell (td:nth-child(7)) */
+    tr.unit-4.disabled-row td:nth-child(7) {
+      background-color: rgba(231, 76, 60, 0.1) !important; /* Light red tint */
+      opacity: 0.6; /* Apply opacity here as well */
     }
 
-    .disabled-row td:not(:last-child) {
-      background-color: rgba(255, 107, 107, 0.05) !important;
+    /* For MULTI-MODULE units, their rowspan Unit Grade cell gets the specific disabled appearance
+       ONLY if ALL its constituent modules are disabled (via Vue-bound class). */
+    .unit-grade-specific-disabled { 
+      background-color: rgba(231, 76, 60, 0.1) !important; /* Light red tint */
+      opacity: 0.6 !important; /* Apply opacity here when all modules in the unit are off */
     }
+
 
     /* Result Display */
     .result-card {
@@ -413,7 +417,6 @@
       }
 
       .form-select {
-        /* Updated padding for mobile: more space on the right for the arrow */
         padding: 0.5rem 2rem 0.5rem 0.7rem; /* top, right, bottom, left */
         font-size: 0.8rem;
       }
@@ -436,14 +439,15 @@
         width: 55px !important;
       }
       
-      .table td:nth-child(2) {
-        min-width: 80px;
+      .table td:nth-child(2) { 
+        min-width: 80px; 
       }
 
       .toggle-label {
         display: none;
       }
 
+      /* Hide Coef (3rd), Module Grade (6th), and Unit Grade (7th) columns on mobile */
       .table th:nth-child(3),
       .table td:nth-child(3),
       .table th:nth-child(6),
@@ -467,9 +471,9 @@
         transform: translateX(20px);
       }
 
-      .exam-toggle {
-        width: 26px;
-        height: 26px;
+      .exam-toggle { 
+        width: 26px;  
+        height: 26px; 
         font-size: 0.9rem;
         padding: 0.3rem;
       }
@@ -478,20 +482,20 @@
       }
 
       .result-card {
-        padding: 1rem;
+        padding: 1rem; 
         margin: 1rem 0;
       }
 
       .result-text {
-        font-size: 1.1rem;
+        font-size: 1.1rem; 
       }
 
       .result-grade {
-        font-size: 1.8rem;
+        font-size: 1.8rem; 
       }
 
       .footer {
-        padding: 1rem 0;
+        padding: 1rem 0; 
         margin-top: 1rem;
       }
     }
@@ -541,21 +545,8 @@
       transform: translateY(-1px);
     }
 
-    /* Better disabled state for exam inputs */
-    .exam-disabled {
+    .exam-disabled { 
       position: relative;
-    }
-
-    .exam-disabled::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
-      border-radius: 8px;
-      pointer-events: none;
     }
 
     /* Better visual feedback for toggles */
@@ -636,15 +627,15 @@
                     <input type="number" v-model="studySkillsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="studySkillsExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': studySkillsNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': studySkillsExcluded || studySkillsNoExam}"> 
                       <input type="number" v-model="studySkillsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="studySkillsExcluded || studySkillsNoExam">
-                      <button class="exam-toggle" :class="{'disabled': studySkillsExcluded, 'active': studySkillsNoExam}" @click="!studySkillsExcluded && (studySkillsNoExam = !studySkillsNoExam)" :title="studySkillsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': studySkillsExcluded, 'active': studySkillsNoExam && !studySkillsExcluded}" @click="!studySkillsExcluded && (studySkillsNoExam = !studySkillsNoExam)" :title="studySkillsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
                   <td class="fw-semibold">{{ studySkillsModuleGrade.toFixed(2) }}</td>
-                  <td rowspan="3" class="fw-bold text-primary">{{ unit1Grade.toFixed(2) }}</td>
+                  <td rowspan="3" class="fw-bold text-primary" :class="{'unit-grade-specific-disabled': unit1AllModulesDisabled}">{{ unit1Grade.toFixed(2) }}</td>
                 </tr>
                 <tr class="unit-1" :class="{'disabled-row': readingExcluded}">
                   <td>
@@ -662,15 +653,15 @@
                     <input type="number" v-model="readingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="readingExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': readingNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': readingExcluded || readingNoExam}">
                       <input type="number" v-model="readingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="readingExcluded || readingNoExam">
-                      <button class="exam-toggle" :class="{'disabled': readingExcluded, 'active': readingNoExam}" @click="!readingExcluded && (readingNoExam = !readingNoExam)" :title="readingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': readingExcluded, 'active': readingNoExam && !readingExcluded}" @click="!readingExcluded && (readingNoExam = !readingNoExam)" :title="readingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
                   <td class="fw-semibold">{{ readingModuleGrade.toFixed(2) }}</td>
-                  </tr>
+                </tr>
                 <tr class="unit-1" :class="{'disabled-row': ictExcluded}">
                   <td>
                     <div class="toggle-container">
@@ -687,15 +678,15 @@
                     <input type="number" v-model="ictTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="ictExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': ictNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': ictExcluded || ictNoExam}">
                       <input type="number" v-model="ictExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="ictExcluded || ictNoExam">
-                      <button class="exam-toggle" :class="{'disabled': ictExcluded, 'active': ictNoExam}" @click="!ictExcluded && (ictNoExam = !ictNoExam)" :title="ictNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': ictExcluded, 'active': ictNoExam && !ictExcluded}" @click="!ictExcluded && (ictNoExam = !ictNoExam)" :title="ictNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
                   <td class="fw-semibold">{{ ictModuleGrade.toFixed(2) }}</td>
-                  </tr>
+                </tr>
                 <tr class="unit-2" :class="{'disabled-row': listeningSpeakingExcluded}">
                   <td>
                     <div class="toggle-container">
@@ -712,15 +703,15 @@
                     <input type="number" v-model="listeningSpeakingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="listeningSpeakingExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': listeningSpeakingNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': listeningSpeakingExcluded || listeningSpeakingNoExam}">
                       <input type="number" v-model="listeningSpeakingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="listeningSpeakingExcluded || listeningSpeakingNoExam">
-                      <button class="exam-toggle" :class="{'disabled': listeningSpeakingExcluded, 'active': listeningSpeakingNoExam}" @click="!listeningSpeakingExcluded && (listeningSpeakingNoExam = !listeningSpeakingNoExam)" :title="listeningSpeakingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': listeningSpeakingExcluded, 'active': listeningSpeakingNoExam && !listeningSpeakingExcluded}" @click="!listeningSpeakingExcluded && (listeningSpeakingNoExam = !listeningSpeakingNoExam)" :title="listeningSpeakingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
                   <td class="fw-semibold">{{ listeningSpeakingModuleGrade.toFixed(2) }}</td>
-                  <td rowspan="2" class="fw-bold text-primary">{{ unit2Grade.toFixed(2) }}</td>
+                  <td rowspan="2" class="fw-bold text-primary" :class="{'unit-grade-specific-disabled': unit2AllModulesDisabled}">{{ unit2Grade.toFixed(2) }}</td>
                 </tr>
                 <tr class="unit-2" :class="{'disabled-row': writingExcluded}">
                   <td>
@@ -738,15 +729,15 @@
                     <input type="number" v-model="writingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="writingExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': writingNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': writingExcluded || writingNoExam}">
                       <input type="number" v-model="writingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="writingExcluded || writingNoExam">
-                      <button class="exam-toggle" :class="{'disabled': writingExcluded, 'active': writingNoExam}" @click="!writingExcluded && (writingNoExam = !writingNoExam)" :title="writingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': writingExcluded, 'active': writingNoExam && !writingExcluded}" @click="!writingExcluded && (writingNoExam = !writingNoExam)" :title="writingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
                   <td class="fw-semibold">{{ writingModuleGrade.toFixed(2) }}</td>
-                   </tr>
+                </tr>
                 <tr class="unit-3" :class="{'disabled-row': linguisticsPhoneticsExcluded}">
                   <td>
                     <div class="toggle-container">
@@ -763,15 +754,15 @@
                     <input type="number" v-model="linguisticsPhoneticsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="linguisticsPhoneticsExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': linguisticsPhoneticsNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': linguisticsPhoneticsExcluded || linguisticsPhoneticsNoExam}">
                       <input type="number" v-model="linguisticsPhoneticsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="linguisticsPhoneticsExcluded || linguisticsPhoneticsNoExam">
-                      <button class="exam-toggle" :class="{'disabled': linguisticsPhoneticsExcluded, 'active': linguisticsPhoneticsNoExam}" @click="!linguisticsPhoneticsExcluded && (linguisticsPhoneticsNoExam = !linguisticsPhoneticsNoExam)" :title="linguisticsPhoneticsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': linguisticsPhoneticsExcluded, 'active': linguisticsPhoneticsNoExam && !linguisticsPhoneticsExcluded}" @click="!linguisticsPhoneticsExcluded && (linguisticsPhoneticsNoExam = !linguisticsPhoneticsNoExam)" :title="linguisticsPhoneticsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
                   <td class="fw-semibold">{{ linguisticsPhoneticsModuleGrade.toFixed(2) }}</td>
-                  <td rowspan="2" class="fw-bold text-primary">{{ unit3Grade.toFixed(2) }}</td>
+                  <td rowspan="2" class="fw-bold text-primary" :class="{'unit-grade-specific-disabled': unit3AllModulesDisabled}">{{ unit3Grade.toFixed(2) }}</td>
                 </tr>
                 <tr class="unit-3" :class="{'disabled-row': grammarExcluded}">
                   <td>
@@ -789,15 +780,15 @@
                     <input type="number" v-model="grammarTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="grammarExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': grammarNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': grammarExcluded || grammarNoExam}">
                       <input type="number" v-model="grammarExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="grammarExcluded || grammarNoExam">
-                      <button class="exam-toggle" :class="{'disabled': grammarExcluded, 'active': grammarNoExam}" @click="!grammarExcluded && (grammarNoExam = !grammarNoExam)" :title="grammarNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': grammarExcluded, 'active': grammarNoExam && !grammarExcluded}" @click="!grammarExcluded && (grammarNoExam = !grammarNoExam)" :title="grammarNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
                   <td class="fw-semibold">{{ grammarModuleGrade.toFixed(2) }}</td>
-                   </tr>
+                </tr>
                 <tr class="unit-4" :class="{'disabled-row': civilisationExcluded}">
                   <td>
                     <div class="toggle-container">
@@ -814,15 +805,15 @@
                     <input type="number" v-model="civilisationTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="civilisationExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': civilisationNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': civilisationExcluded || civilisationNoExam}">
                       <input type="number" v-model="civilisationExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="civilisationExcluded || civilisationNoExam">
-                      <button class="exam-toggle" :class="{'disabled': civilisationExcluded, 'active': civilisationNoExam}" @click="!civilisationExcluded && (civilisationNoExam = !civilisationNoExam)" :title="civilisationNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': civilisationExcluded, 'active': civilisationNoExam && !civilisationExcluded}" @click="!civilisationExcluded && (civilisationNoExam = !civilisationNoExam)" :title="civilisationNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
                   <td class="fw-semibold">{{ civilisationModuleGrade.toFixed(2) }}</td>
-                  <td class="fw-bold text-primary">{{ unit4Grade.toFixed(2) }}</td>
+                  <td class="fw-bold text-primary">{{ unit4Grade.toFixed(2) }}</td> 
                 </tr>
                 <tr class="unit-4" :class="{'disabled-row': literaryTextsExcluded}">
                   <td>
@@ -840,9 +831,9 @@
                     <input type="number" v-model="literaryTextsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="literaryTextsExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': literaryTextsNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': literaryTextsExcluded || literaryTextsNoExam}">
                       <input type="number" v-model="literaryTextsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="literaryTextsExcluded || literaryTextsNoExam">
-                      <button class="exam-toggle" :class="{'disabled': literaryTextsExcluded, 'active': literaryTextsNoExam}" @click="!literaryTextsExcluded && (literaryTextsNoExam = !literaryTextsNoExam)" :title="literaryTextsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': literaryTextsExcluded, 'active': literaryTextsNoExam && !literaryTextsExcluded}" @click="!literaryTextsExcluded && (literaryTextsNoExam = !literaryTextsNoExam)" :title="literaryTextsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
@@ -866,9 +857,9 @@
                     <input type="number" v-model="foreignLanguageTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="foreignLanguageExcluded">
                   </td>
                   <td>
-                    <div class="exam-toggle-container" :class="{'exam-disabled': foreignLanguageNoExam}">
+                    <div class="exam-toggle-container" :class="{'exam-disabled': foreignLanguageExcluded || foreignLanguageNoExam}">
                       <input type="number" v-model="foreignLanguageExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="foreignLanguageExcluded || foreignLanguageNoExam">
-                      <button class="exam-toggle" :class="{'disabled': foreignLanguageExcluded, 'active': foreignLanguageNoExam}" @click="!foreignLanguageExcluded && (foreignLanguageNoExam = !foreignLanguageNoExam)" :title="foreignLanguageNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': foreignLanguageExcluded, 'active': foreignLanguageNoExam && !foreignLanguageExcluded}" @click="!foreignLanguageExcluded && (foreignLanguageNoExam = !foreignLanguageNoExam)" :title="foreignLanguageNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
@@ -899,321 +890,125 @@
 
     createApp({
       setup() {
-        // Language state
-        const language = ref('en'); // 'en' for English, 'fr' for French
+        const language = ref('en'); 
         const currentYear = computed(() => new Date().getFullYear());
 
-        // Module names based on language
         const moduleNames = computed(() => {
           if (language.value === 'en') {
             return {
-              studySkills: 'Study Skills',
-              reading: 'Reading',
-              ict: 'ICT',
-              listeningSpeaking: 'Listening & Speaking',
-              writing: 'Writing',
-              linguisticsPhonetics: 'Linguistics & Phonetics',
-              grammar: 'Grammar',
-              civilisation: 'Civilisation of the language',
-              literaryTexts: 'Literary Texts',
-              foreignLanguage: 'Foreign Language',
+              studySkills: 'Study Skills', reading: 'Reading', ict: 'ICT',
+              listeningSpeaking: 'Listening & Speaking', writing: 'Writing',
+              linguisticsPhonetics: 'Linguistics & Phonetics', grammar: 'Grammar',
+              civilisation: 'Civilisation of the language', literaryTexts: 'Literary Texts', foreignLanguage: 'Foreign Language',
             };
           } else {
             return {
-              studySkills: 'Techniques du travail universitaire',
-              reading: 'Lecture et étude de textes',
-              ict: 'TIC et e-Learning',
-              listeningSpeaking: 'Compréhension et expression orales',
-              writing: 'Compréhension et expression écrites',
-              linguisticsPhonetics: 'Linguistique et phonétique',
-              grammar: 'Grammaire',
-              civilisation: 'Civilisations de la langue',
-              literaryTexts: 'Littératures de la langue d\'étude',
-              foreignLanguage: 'Langue étrangère',
+              studySkills: 'Techniques du travail universitaire', reading: 'Lecture et étude de textes', ict: 'TIC et e-Learning',
+              listeningSpeaking: 'Compréhension et expression orales', writing: 'Compréhension et expression écrites',
+              linguisticsPhonetics: 'Linguistique et phonétique', grammar: 'Grammaire',
+              civilisation: 'Civilisations de la langue', literaryTexts: 'Littératures de la langue d\'étude', foreignLanguage: 'Langue étrangère',
             };
           }
         });
 
-        // Weighting selection
         const weighting = ref('40-60');
 
-        // Module grades (TD and Exam)
-        const studySkillsTD = ref('');
-        const studySkillsExam = ref('');
-        const studySkillsExcluded = ref(false);
-        const studySkillsNoExam = ref(false);
+        const studySkillsTD = ref(''); const studySkillsExam = ref(''); const studySkillsExcluded = ref(false); const studySkillsNoExam = ref(false);
+        const readingTD = ref(''); const readingExam = ref(''); const readingExcluded = ref(false); const readingNoExam = ref(false);
+        const ictTD = ref(''); const ictExam = ref(''); const ictExcluded = ref(false); const ictNoExam = ref(false);
+        const listeningSpeakingTD = ref(''); const listeningSpeakingExam = ref(''); const listeningSpeakingExcluded = ref(false); const listeningSpeakingNoExam = ref(false);
+        const writingTD = ref(''); const writingExam = ref(''); const writingExcluded = ref(false); const writingNoExam = ref(false);
+        const linguisticsPhoneticsTD = ref(''); const linguisticsPhoneticsExam = ref(''); const linguisticsPhoneticsExcluded = ref(false); const linguisticsPhoneticsNoExam = ref(false);
+        const grammarTD = ref(''); const grammarExam = ref(''); const grammarExcluded = ref(false); const grammarNoExam = ref(false);
+        const civilisationTD = ref(''); const civilisationExam = ref(''); const civilisationExcluded = ref(false); const civilisationNoExam = ref(false);
+        const literaryTextsTD = ref(''); const literaryTextsExam = ref(''); const literaryTextsExcluded = ref(false); const literaryTextsNoExam = ref(false);
+        const foreignLanguageTD = ref(''); const foreignLanguageExam = ref(''); const foreignLanguageExcluded = ref(false); const foreignLanguageNoExam = ref(false);
 
-        const readingTD = ref('');
-        const readingExam = ref('');
-        const readingExcluded = ref(false);
-        const readingNoExam = ref(false);
-
-        const ictTD = ref('');
-        const ictExam = ref('');
-        const ictExcluded = ref(false);
-        const ictNoExam = ref(false);
-
-        const listeningSpeakingTD = ref('');
-        const listeningSpeakingExam = ref('');
-        const listeningSpeakingExcluded = ref(false);
-        const listeningSpeakingNoExam = ref(false);
-
-        const writingTD = ref('');
-        const writingExam = ref('');
-        const writingExcluded = ref(false);
-        const writingNoExam = ref(false);
-
-        const linguisticsPhoneticsTD = ref('');
-        const linguisticsPhoneticsExam = ref('');
-        const linguisticsPhoneticsExcluded = ref(false);
-        const linguisticsPhoneticsNoExam = ref(false);
-
-        const grammarTD = ref('');
-        const grammarExam = ref('');
-        const grammarExcluded = ref(false);
-        const grammarNoExam = ref(false);
-
-        const civilisationTD = ref('');
-        const civilisationExam = ref('');
-        const civilisationExcluded = ref(false);
-        const civilisationNoExam = ref(false);
-
-        const literaryTextsTD = ref('');
-        const literaryTextsExam = ref('');
-        const literaryTextsExcluded = ref(false);
-        const literaryTextsNoExam = ref(false);
-
-        const foreignLanguageTD = ref('');
-        const foreignLanguageExam = ref('');
-        const foreignLanguageExcluded = ref(false);
-        const foreignLanguageNoExam = ref(false);
-
-        // Coefficients
         const coefficients = {
-          studySkills: 2,
-          reading: 2,
-          ict: 1,
-          listeningSpeaking: 2,
-          writing: 2,
-          linguisticsPhonetics: 2,
-          grammar: 2,
-          civilisation: 2,
-          literaryTexts: 1,
-          foreignLanguage: 1,
+          studySkills: 2, reading: 2, ict: 1, listeningSpeaking: 2, writing: 2,
+          linguisticsPhonetics: 2, grammar: 2, civilisation: 2, literaryTexts: 1, foreignLanguage: 1,
         };
 
-        // Helper function to calculate module grade
         const calculateModuleGrade = (td, exam, excluded, noExam) => {
-          const tdVal = parseFloat(td) || 0;
-          const examVal = parseFloat(exam) || 0;
-
-          if (excluded) return 0; // Exclude if not studied
-          if (noExam) return tdVal; // If no exam, use TD grade only
-
+          const tdVal = parseFloat(td) || 0; const examVal = parseFloat(exam) || 0;
+          if (excluded) return 0; if (noExam) return tdVal;
           const tdWeight = weighting.value === '40-60' ? 0.4 : 0.5;
           const examWeight = weighting.value === '40-60' ? 0.6 : 0.5;
           return (tdVal * tdWeight) + (examVal * examWeight);
         };
 
-        // Module grades (computed)
-        const studySkillsModuleGrade = computed(() => calculateModuleGrade(
-          studySkillsTD.value, studySkillsExam.value, studySkillsExcluded.value, studySkillsNoExam.value));
-        const readingModuleGrade = computed(() => calculateModuleGrade(
-          readingTD.value, readingExam.value, readingExcluded.value, readingNoExam.value));
-        const ictModuleGrade = computed(() => calculateModuleGrade(
-          ictTD.value, ictExam.value, ictExcluded.value, ictNoExam.value));
-        const listeningSpeakingModuleGrade = computed(() => calculateModuleGrade(
-          listeningSpeakingTD.value, listeningSpeakingExam.value, listeningSpeakingExcluded.value, listeningSpeakingNoExam.value));
-        const writingModuleGrade = computed(() => calculateModuleGrade(
-          writingTD.value, writingExam.value, writingExcluded.value, writingNoExam.value));
-        const linguisticsPhoneticsModuleGrade = computed(() => calculateModuleGrade(
-          linguisticsPhoneticsTD.value, linguisticsPhoneticsExam.value, linguisticsPhoneticsExcluded.value, linguisticsPhoneticsNoExam.value));
-        const grammarModuleGrade = computed(() => calculateModuleGrade(
-          grammarTD.value, grammarExam.value, grammarExcluded.value, grammarNoExam.value));
-        const civilisationModuleGrade = computed(() => calculateModuleGrade(
-          civilisationTD.value, civilisationExam.value, civilisationExcluded.value, civilisationNoExam.value));
-        const literaryTextsModuleGrade = computed(() => calculateModuleGrade(
-          literaryTextsTD.value, literaryTextsExam.value, literaryTextsExcluded.value, literaryTextsNoExam.value));
-        const foreignLanguageModuleGrade = computed(() => calculateModuleGrade(
-          foreignLanguageTD.value, foreignLanguageExam.value, foreignLanguageExcluded.value, foreignLanguageNoExam.value));
+        const studySkillsModuleGrade = computed(() => calculateModuleGrade(studySkillsTD.value, studySkillsExam.value, studySkillsExcluded.value, studySkillsNoExam.value));
+        const readingModuleGrade = computed(() => calculateModuleGrade(readingTD.value, readingExam.value, readingExcluded.value, readingNoExam.value));
+        const ictModuleGrade = computed(() => calculateModuleGrade(ictTD.value, ictExam.value, ictExcluded.value, ictNoExam.value));
+        const listeningSpeakingModuleGrade = computed(() => calculateModuleGrade(listeningSpeakingTD.value, listeningSpeakingExam.value, listeningSpeakingExcluded.value, listeningSpeakingNoExam.value));
+        const writingModuleGrade = computed(() => calculateModuleGrade(writingTD.value, writingExam.value, writingExcluded.value, writingNoExam.value));
+        const linguisticsPhoneticsModuleGrade = computed(() => calculateModuleGrade(linguisticsPhoneticsTD.value, linguisticsPhoneticsExam.value, linguisticsPhoneticsExcluded.value, linguisticsPhoneticsNoExam.value));
+        const grammarModuleGrade = computed(() => calculateModuleGrade(grammarTD.value, grammarExam.value, grammarExcluded.value, grammarNoExam.value));
+        const civilisationModuleGrade = computed(() => calculateModuleGrade(civilisationTD.value, civilisationExam.value, civilisationExcluded.value, civilisationNoExam.value));
+        const literaryTextsModuleGrade = computed(() => calculateModuleGrade(literaryTextsTD.value, literaryTextsExam.value, literaryTextsExcluded.value, literaryTextsNoExam.value));
+        const foreignLanguageModuleGrade = computed(() => calculateModuleGrade(foreignLanguageTD.value, foreignLanguageExam.value, foreignLanguageExcluded.value, foreignLanguageNoExam.value));
 
-        // Unit grades (computed)
+        const unit1AllModulesDisabled = computed(() => studySkillsExcluded.value && readingExcluded.value && ictExcluded.value);
+        const unit2AllModulesDisabled = computed(() => listeningSpeakingExcluded.value && writingExcluded.value);
+        const unit3AllModulesDisabled = computed(() => linguisticsPhoneticsExcluded.value && grammarExcluded.value);
+
         const unit1Grade = computed(() => {
           let total = 0, totalCoef = 0;
-
-          if (!studySkillsExcluded.value) {
-            total += studySkillsModuleGrade.value * coefficients.studySkills;
-            totalCoef += coefficients.studySkills;
-          }
-
-          if (!readingExcluded.value) {
-            total += readingModuleGrade.value * coefficients.reading;
-            totalCoef += coefficients.reading;
-          }
-
-          if (!ictExcluded.value) {
-            total += ictModuleGrade.value * coefficients.ict;
-            totalCoef += coefficients.ict;
-          }
-
+          if (!studySkillsExcluded.value) { total += studySkillsModuleGrade.value * coefficients.studySkills; totalCoef += coefficients.studySkills; }
+          if (!readingExcluded.value) { total += readingModuleGrade.value * coefficients.reading; totalCoef += coefficients.reading; }
+          if (!ictExcluded.value) { total += ictModuleGrade.value * coefficients.ict; totalCoef += coefficients.ict; }
           return totalCoef > 0 ? total / totalCoef : 0; 
         });
-
         const unit2Grade = computed(() => {
           let total = 0, totalCoef = 0;
-
-          if (!listeningSpeakingExcluded.value) {
-            total += listeningSpeakingModuleGrade.value * coefficients.listeningSpeaking;
-            totalCoef += coefficients.listeningSpeaking;
-          }
-
-          if (!writingExcluded.value) {
-            total += writingModuleGrade.value * coefficients.writing;
-            totalCoef += coefficients.writing;
-          }
-
+          if (!listeningSpeakingExcluded.value) { total += listeningSpeakingModuleGrade.value * coefficients.listeningSpeaking; totalCoef += coefficients.listeningSpeaking; }
+          if (!writingExcluded.value) { total += writingModuleGrade.value * coefficients.writing; totalCoef += coefficients.writing; }
           return totalCoef > 0 ? total / totalCoef : 0;
         });
-
         const unit3Grade = computed(() => {
           let total = 0, totalCoef = 0;
-
-          if (!linguisticsPhoneticsExcluded.value) {
-            total += linguisticsPhoneticsModuleGrade.value * coefficients.linguisticsPhonetics;
-            totalCoef += coefficients.linguisticsPhonetics;
-          }
-
-          if (!grammarExcluded.value) {
-            total += grammarModuleGrade.value * coefficients.grammar;
-            totalCoef += coefficients.grammar;
-          }
-
+          if (!linguisticsPhoneticsExcluded.value) { total += linguisticsPhoneticsModuleGrade.value * coefficients.linguisticsPhonetics; totalCoef += coefficients.linguisticsPhonetics; }
+          if (!grammarExcluded.value) { total += grammarModuleGrade.value * coefficients.grammar; totalCoef += coefficients.grammar; }
           return totalCoef > 0 ? total / totalCoef : 0;
         });
-
         const unit4Grade = computed(() => !civilisationExcluded.value ? civilisationModuleGrade.value : 0);
         const unit5Grade = computed(() => !literaryTextsExcluded.value ? literaryTextsModuleGrade.value : 0);
         const unit6Grade = computed(() => !foreignLanguageExcluded.value ? foreignLanguageModuleGrade.value : 0);
 
-        // Overall grade (computed)
         const overallGrade = computed(() => {
           let total = 0, totalCoef = 0;
-
-          if (!studySkillsExcluded.value) {
-            total += studySkillsModuleGrade.value * coefficients.studySkills;
-            totalCoef += coefficients.studySkills;
-          }
-
-          if (!readingExcluded.value) {
-            total += readingModuleGrade.value * coefficients.reading;
-            totalCoef += coefficients.reading;
-          }
-
-          if (!ictExcluded.value) {
-            total += ictModuleGrade.value * coefficients.ict;
-            totalCoef += coefficients.ict;
-          }
-
-          if (!listeningSpeakingExcluded.value) {
-            total += listeningSpeakingModuleGrade.value * coefficients.listeningSpeaking;
-            totalCoef += coefficients.listeningSpeaking;
-          }
-
-          if (!writingExcluded.value) {
-            total += writingModuleGrade.value * coefficients.writing;
-            totalCoef += coefficients.writing;
-          }
-
-          if (!linguisticsPhoneticsExcluded.value) {
-            total += linguisticsPhoneticsModuleGrade.value * coefficients.linguisticsPhonetics;
-            totalCoef += coefficients.linguisticsPhonetics;
-          }
-
-          if (!grammarExcluded.value) {
-            total += grammarModuleGrade.value * coefficients.grammar;
-            totalCoef += coefficients.grammar;
-          }
-
-          if (!civilisationExcluded.value) {
-            total += civilisationModuleGrade.value * coefficients.civilisation;
-            totalCoef += coefficients.civilisation;
-          }
-
-          if (!literaryTextsExcluded.value) {
-            total += literaryTextsModuleGrade.value * coefficients.literaryTexts;
-            totalCoef += coefficients.literaryTexts;
-          }
-
-          if (!foreignLanguageExcluded.value) {
-            total += foreignLanguageModuleGrade.value * coefficients.foreignLanguage;
-            totalCoef += coefficients.foreignLanguage;
-          }
-
+          if (!studySkillsExcluded.value) { total += studySkillsModuleGrade.value * coefficients.studySkills; totalCoef += coefficients.studySkills; }
+          if (!readingExcluded.value) { total += readingModuleGrade.value * coefficients.reading; totalCoef += coefficients.reading; }
+          if (!ictExcluded.value) { total += ictModuleGrade.value * coefficients.ict; totalCoef += coefficients.ict; }
+          if (!listeningSpeakingExcluded.value) { total += listeningSpeakingModuleGrade.value * coefficients.listeningSpeaking; totalCoef += coefficients.listeningSpeaking; }
+          if (!writingExcluded.value) { total += writingModuleGrade.value * coefficients.writing; totalCoef += coefficients.writing; }
+          if (!linguisticsPhoneticsExcluded.value) { total += linguisticsPhoneticsModuleGrade.value * coefficients.linguisticsPhonetics; totalCoef += coefficients.linguisticsPhonetics; }
+          if (!grammarExcluded.value) { total += grammarModuleGrade.value * coefficients.grammar; totalCoef += coefficients.grammar; }
+          if (!civilisationExcluded.value) { total += civilisationModuleGrade.value * coefficients.civilisation; totalCoef += coefficients.civilisation; }
+          if (!literaryTextsExcluded.value) { total += literaryTextsModuleGrade.value * coefficients.literaryTexts; totalCoef += coefficients.literaryTexts; }
+          if (!foreignLanguageExcluded.value) { total += foreignLanguageModuleGrade.value * coefficients.foreignLanguage; totalCoef += coefficients.foreignLanguage; }
           return totalCoef > 0 ? total / totalCoef : 0;
         });
 
         return {
-          language,
-          moduleNames,
-          weighting,
-          studySkillsTD,
-          studySkillsExam,
-          studySkillsExcluded,
-          studySkillsNoExam,
-          readingTD,
-          readingExam,
-          readingExcluded,
-          readingNoExam,
-          ictTD,
-          ictExam,
-          ictExcluded,
-          ictNoExam,
-          listeningSpeakingTD,
-          listeningSpeakingExam,
-          listeningSpeakingExcluded,
-          listeningSpeakingNoExam,
-          writingTD,
-          writingExam,
-          writingExcluded,
-          writingNoExam,
-          linguisticsPhoneticsTD,
-          linguisticsPhoneticsExam,
-          linguisticsPhoneticsExcluded,
-          linguisticsPhoneticsNoExam,
-          grammarTD,
-          grammarExam,
-          grammarExcluded,
-          grammarNoExam,
-          civilisationTD,
-          civilisationExam,
-          civilisationExcluded,
-          civilisationNoExam,
-          literaryTextsTD,
-          literaryTextsExam,
-          literaryTextsExcluded,
-          literaryTextsNoExam,
-          foreignLanguageTD,
-          foreignLanguageExam,
-          foreignLanguageExcluded,
-          foreignLanguageNoExam,
-          studySkillsModuleGrade,
-          readingModuleGrade,
-          ictModuleGrade,
-          listeningSpeakingModuleGrade,
-          writingModuleGrade,
-          linguisticsPhoneticsModuleGrade,
-          grammarModuleGrade,
-          civilisationModuleGrade,
-          literaryTextsModuleGrade,
-          foreignLanguageModuleGrade,
-          unit1Grade,
-          unit2Grade,
-          unit3Grade,
-          unit4Grade,
-          unit5Grade,
-          unit6Grade,
-          overallGrade,
-          currentYear,
+          language, moduleNames, weighting,
+          studySkillsTD, studySkillsExam, studySkillsExcluded, studySkillsNoExam,
+          readingTD, readingExam, readingExcluded, readingNoExam,
+          ictTD, ictExam, ictExcluded, ictNoExam,
+          listeningSpeakingTD, listeningSpeakingExam, listeningSpeakingExcluded, listeningSpeakingNoExam,
+          writingTD, writingExam, writingExcluded, writingNoExam,
+          linguisticsPhoneticsTD, linguisticsPhoneticsExam, linguisticsPhoneticsExcluded, linguisticsPhoneticsNoExam,
+          grammarTD, grammarExam, grammarExcluded, grammarNoExam,
+          civilisationTD, civilisationExam, civilisationExcluded, civilisationNoExam,
+          literaryTextsTD, literaryTextsExam, literaryTextsExcluded, literaryTextsNoExam,
+          foreignLanguageTD, foreignLanguageExam, foreignLanguageExcluded, foreignLanguageNoExam,
+          studySkillsModuleGrade, readingModuleGrade, ictModuleGrade,
+          listeningSpeakingModuleGrade, writingModuleGrade,
+          linguisticsPhoneticsModuleGrade, grammarModuleGrade,
+          civilisationModuleGrade, literaryTextsModuleGrade, foreignLanguageModuleGrade,
+          unit1Grade, unit2Grade, unit3Grade, unit4Grade, unit5Grade, unit6Grade,
+          overallGrade, currentYear,
+          unit1AllModulesDisabled, unit2AllModulesDisabled, unit3AllModulesDisabled,
         };
       },
     }).mount('#app');
