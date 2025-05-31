@@ -110,10 +110,13 @@
     .form-select {
       border: 2px solid var(--border-color);
       border-radius: 8px;
-      padding: 0.75rem 1rem;
+      /* Updated padding for desktop: more space on the right for the arrow */
+      padding: 0.75rem 2.5rem 0.75rem 1rem; /* top, right, bottom, left */
       font-size: 0.95rem;
       transition: var(--transition);
       background-color: white;
+      /* Bootstrap's default .form-select CSS will provide the arrow image and basic positioning.
+         Our padding ensures text doesn't overlap it. */
     }
 
     .form-select:focus {
@@ -388,62 +391,59 @@
 
       .main-container {
         margin: 10px;
-        padding: 15px; /* Slightly reduced padding for main container */
+        padding: 15px;
         border-radius: 12px;
       }
 
       h1 {
-        font-size: 1.6rem; /* Slightly reduced */
+        font-size: 1.6rem;
       }
 
       h3 {
-        font-size: 1.0rem; /* Slightly reduced */
+        font-size: 1.0rem;
       }
 
       h4 {
-        font-size: 0.9rem; /* Slightly reduced */
+        font-size: 0.9rem;
         margin-bottom: 1rem;
       }
 
       .control-card .card-body {
-        padding: 0.75rem; /* Reduced */
+        padding: 0.75rem;
       }
 
       .form-select {
-        padding: 0.5rem 0.7rem; /* Reduced */
-        font-size: 0.8rem;    /* Reduced */
+        /* Updated padding for mobile: more space on the right for the arrow */
+        padding: 0.5rem 2rem 0.5rem 0.7rem; /* top, right, bottom, left */
+        font-size: 0.8rem;
       }
 
       .table thead th,
       .table tbody td {
-        padding: 0.5rem 0.25rem; /* Reduced padding in table cells */
-        font-size: 0.75rem;    /* Reduced font size in table cells */
-        word-break: break-word; /* Help break long module names if necessary */
+        padding: 0.5rem 0.25rem;
+        font-size: 0.75rem;
+        word-break: break-word; 
       }
 
-      .form-control { /* Affects TD/Exam grade inputs */
-        padding: 0.4rem;     /* Reduced padding in input fields */
-        font-size: 0.75rem;   /* Reduced font size in input fields */
-        min-width: 50px; /* Ensure inputs don't get too squished */
+      .form-control {
+        padding: 0.4rem;
+        font-size: 0.75rem;
+        min-width: 50px;
       }
 
-      /* Make the first column (Status) narrower */
       .table th:first-child,
       .table td:first-child {
-        width: 55px !important; /* Override inline style, fit toggle (44px) + some padding */
+        width: 55px !important;
       }
       
-      .table td:nth-child(2) { /* Module name column */
-        min-width: 80px; /* Give module name a bit more space to avoid excessive wrapping */
+      .table td:nth-child(2) {
+        min-width: 80px;
       }
 
-
-      /* Hide "On/Off" text for toggles on mobile */
       .toggle-label {
         display: none;
       }
 
-      /* Hide Coef (3rd), Module Grade (6th), and Unit Grade (7th) columns on mobile */
       .table th:nth-child(3),
       .table td:nth-child(3),
       .table th:nth-child(6),
@@ -467,33 +467,31 @@
         transform: translateX(20px);
       }
 
-      .exam-toggle { /* Exam X button */
-        width: 26px;  /* Slightly smaller */
-        height: 26px; /* Slightly smaller */
+      .exam-toggle {
+        width: 26px;
+        height: 26px;
         font-size: 0.9rem;
         padding: 0.3rem;
       }
       .exam-toggle-container input.form-control {
-        /* If exam input is next to a toggle, ensure it doesn't get too wide */
-         max-width: calc(100% - 30px); /* Adjust based on toggle size and gap */
+         max-width: calc(100% - 30px); 
       }
 
-
       .result-card {
-        padding: 1rem; /* Reduced */
+        padding: 1rem;
         margin: 1rem 0;
       }
 
       .result-text {
-        font-size: 1.1rem; /* Reduced */
+        font-size: 1.1rem;
       }
 
       .result-grade {
-        font-size: 1.8rem; /* Reduced */
+        font-size: 1.8rem;
       }
 
       .footer {
-        padding: 1rem 0; /* Reduced */
+        padding: 1rem 0;
         margin-top: 1rem;
       }
     }
@@ -609,14 +607,22 @@
             <table class="table mb-0">
               <thead>
                 <tr>
-                  <th style="width: 100px;">Status</th> <th>Module</th>                       <th style="width: 70px;">Coef</th>   <th style="width: 120px;">TD Grade</th> <th style="width: 150px;">           Exam Grade
+                  <th style="width: 100px;">Status</th>
+                  <th>Module</th>
+                  <th style="width: 70px;">Coef</th>
+                  <th style="width: 120px;">TD Grade</th>
+                  <th style="width: 150px;">
+                    Exam Grade
                     <i class="bi bi-info-circle ms-1" title="Click the X button to disable exam for a module"></i>
                   </th>
-                  <th style="width: 120px;">Module Grade</th><th style="width: 120px;">Unit Grade</th>  </tr>
+                  <th style="width: 120px;">Module Grade</th>
+                  <th style="width: 120px;">Unit Grade</th>
+                </tr>
               </thead>
               <tbody>
                 <tr class="unit-1" :class="{'disabled-row': studySkillsExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="studySkillsExcluded">
                         <span class="slider"></span>
@@ -624,16 +630,22 @@
                       <span class="toggle-label">{{ studySkillsExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.studySkills }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="studySkillsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="studySkillsExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.studySkills }}</td>
+                  <td class="fw-semibold">2</td>
+                  <td>
+                    <input type="number" v-model="studySkillsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="studySkillsExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': studySkillsNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': studySkillsNoExam}">
                       <input type="number" v-model="studySkillsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="studySkillsExcluded || studySkillsNoExam">
                       <button class="exam-toggle" :class="{'disabled': studySkillsExcluded, 'active': studySkillsNoExam}" @click="!studySkillsExcluded && (studySkillsNoExam = !studySkillsNoExam)" :title="studySkillsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ studySkillsModuleGrade.toFixed(2) }}</td> <td rowspan="3" class="fw-bold text-primary">{{ unit1Grade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ studySkillsModuleGrade.toFixed(2) }}</td>
+                  <td rowspan="3" class="fw-bold text-primary">{{ unit1Grade.toFixed(2) }}</td>
+                </tr>
                 <tr class="unit-1" :class="{'disabled-row': readingExcluded}">
                   <td>
                     <div class="toggle-container">
@@ -1044,7 +1056,7 @@
             totalCoef += coefficients.ict;
           }
 
-          return totalCoef > 0 ? total / totalCoef : 0; // Prevent division by zero
+          return totalCoef > 0 ? total / totalCoef : 0; 
         });
 
         const unit2Grade = computed(() => {
