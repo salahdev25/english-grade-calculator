@@ -388,46 +388,55 @@
 
       .main-container {
         margin: 10px;
-        padding: 20px;
+        padding: 15px; /* Slightly reduced padding for main container */
         border-radius: 12px;
       }
 
       h1 {
-        font-size: 1.8rem;
+        font-size: 1.6rem; /* Slightly reduced */
       }
 
       h3 {
-        font-size: 1.1rem;
+        font-size: 1.0rem; /* Slightly reduced */
       }
 
       h4 {
-        font-size: 1rem;
-        margin-bottom: 1.5rem;
+        font-size: 0.9rem; /* Slightly reduced */
+        margin-bottom: 1rem;
       }
 
       .control-card .card-body {
-        padding: 1rem;
+        padding: 0.75rem; /* Reduced */
       }
 
       .form-select {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.9rem;
+        padding: 0.5rem 0.7rem; /* Reduced */
+        font-size: 0.8rem;    /* Reduced */
       }
 
-      .table thead th {
-        padding: 0.75rem 0.5rem;
-        font-size: 0.85rem;
-      }
-
+      .table thead th,
       .table tbody td {
-        padding: 0.75rem 0.5rem;
-        font-size: 0.85rem;
+        padding: 0.5rem 0.25rem; /* Reduced padding in table cells */
+        font-size: 0.75rem;    /* Reduced font size in table cells */
+        word-break: break-word; /* Help break long module names if necessary */
       }
 
-      .form-control {
-        padding: 0.6rem;
-        font-size: 0.85rem;
+      .form-control { /* Affects TD/Exam grade inputs */
+        padding: 0.4rem;     /* Reduced padding in input fields */
+        font-size: 0.75rem;   /* Reduced font size in input fields */
+        min-width: 50px; /* Ensure inputs don't get too squished */
       }
+
+      /* Make the first column (Status) narrower */
+      .table th:first-child,
+      .table td:first-child {
+        width: 55px !important; /* Override inline style, fit toggle (44px) + some padding */
+      }
+      
+      .table td:nth-child(2) { /* Module name column */
+        min-width: 80px; /* Give module name a bit more space to avoid excessive wrapping */
+      }
+
 
       /* Hide "On/Off" text for toggles on mobile */
       .toggle-label {
@@ -444,42 +453,48 @@
         display: none;
       }
 
-      .toggle-switch { /* These rules adjust the visual toggle, keep them */
+      .toggle-switch {
         width: 44px;
         height: 24px;
       }
 
-      .slider:before { /* These rules adjust the visual toggle, keep them */
+      .slider:before {
         height: 16px;
         width: 16px;
       }
 
-      input:checked + .slider:before { /* These rules adjust the visual toggle, keep them */
+      input:checked + .slider:before {
         transform: translateX(20px);
       }
 
-      .exam-toggle {
-        width: 28px;
-        height: 28px;
-        font-size: 1rem;
+      .exam-toggle { /* Exam X button */
+        width: 26px;  /* Slightly smaller */
+        height: 26px; /* Slightly smaller */
+        font-size: 0.9rem;
+        padding: 0.3rem;
+      }
+      .exam-toggle-container input.form-control {
+        /* If exam input is next to a toggle, ensure it doesn't get too wide */
+         max-width: calc(100% - 30px); /* Adjust based on toggle size and gap */
       }
 
+
       .result-card {
-        padding: 1.5rem;
-        margin: 1.5rem 0;
+        padding: 1rem; /* Reduced */
+        margin: 1rem 0;
       }
 
       .result-text {
-        font-size: 1.2rem;
+        font-size: 1.1rem; /* Reduced */
       }
 
       .result-grade {
-        font-size: 2rem;
+        font-size: 1.8rem; /* Reduced */
       }
 
       .footer {
-        padding: 1.5rem 0;
-        margin-top: 1.5rem;
+        padding: 1rem 0; /* Reduced */
+        margin-top: 1rem;
       }
     }
 
@@ -815,7 +830,7 @@
                   <td>
                     <div class="exam-toggle-container" :class="{'exam-disabled': literaryTextsNoExam}">
                       <input type="number" v-model="literaryTextsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="literaryTextsExcluded || literaryTextsNoExam">
-                      <button class="exam-toggle" :class="{'disabled': literaryTextsExcluded, 'active': literaryTextsNoExam}" @click="!literaryTextsExcluded && (literaryTextsNoExam = !literaryTextsNoExam)" :title="literaryTextsNoAModules ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': literaryTextsExcluded, 'active': literaryTextsNoExam}" @click="!literaryTextsExcluded && (literaryTextsNoExam = !literaryTextsNoExam)" :title="literaryTextsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
