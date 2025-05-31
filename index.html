@@ -429,7 +429,14 @@
         font-size: 0.85rem;
       }
 
-      /* Hide Module Grade (6th) and Unit Grade (7th) columns on mobile */
+      /* Hide "On/Off" text for toggles on mobile */
+      .toggle-label {
+        display: none;
+      }
+
+      /* Hide Coef (3rd), Module Grade (6th), and Unit Grade (7th) columns on mobile */
+      .table th:nth-child(3),
+      .table td:nth-child(3),
       .table th:nth-child(6),
       .table td:nth-child(6),
       .table th:nth-child(7),
@@ -437,17 +444,17 @@
         display: none;
       }
 
-      .toggle-switch {
+      .toggle-switch { /* These rules adjust the visual toggle, keep them */
         width: 44px;
         height: 24px;
       }
 
-      .slider:before {
+      .slider:before { /* These rules adjust the visual toggle, keep them */
         height: 16px;
         width: 16px;
       }
 
-      input:checked + .slider:before {
+      input:checked + .slider:before { /* These rules adjust the visual toggle, keep them */
         transform: translateX(20px);
       }
 
@@ -613,7 +620,8 @@
                   </td>
                   <td class="fw-semibold">{{ studySkillsModuleGrade.toFixed(2) }}</td> <td rowspan="3" class="fw-bold text-primary">{{ unit1Grade.toFixed(2) }}</td> </tr>
                 <tr class="unit-1" :class="{'disabled-row': readingExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="readingExcluded">
                         <span class="slider"></span>
@@ -621,18 +629,24 @@
                       <span class="toggle-label">{{ readingExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.reading }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="readingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="readingExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.reading }}</td>
+                  <td class="fw-semibold">2</td>
+                  <td>
+                    <input type="number" v-model="readingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="readingExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': readingNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': readingNoExam}">
                       <input type="number" v-model="readingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="readingExcluded || readingNoExam">
                       <button class="exam-toggle" :class="{'disabled': readingExcluded, 'active': readingNoExam}" @click="!readingExcluded && (readingNoExam = !readingNoExam)" :title="readingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ readingModuleGrade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ readingModuleGrade.toFixed(2) }}</td>
+                  </tr>
                 <tr class="unit-1" :class="{'disabled-row': ictExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="ictExcluded">
                         <span class="slider"></span>
@@ -640,18 +654,24 @@
                       <span class="toggle-label">{{ ictExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.ict }}</td> <td class="fw-semibold">1</td> <td> <input type="number" v-model="ictTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="ictExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.ict }}</td>
+                  <td class="fw-semibold">1</td>
+                  <td>
+                    <input type="number" v-model="ictTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="ictExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': ictNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': ictNoExam}">
                       <input type="number" v-model="ictExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="ictExcluded || ictNoExam">
                       <button class="exam-toggle" :class="{'disabled': ictExcluded, 'active': ictNoExam}" @click="!ictExcluded && (ictNoExam = !ictNoExam)" :title="ictNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ ictModuleGrade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ ictModuleGrade.toFixed(2) }}</td>
+                  </tr>
                 <tr class="unit-2" :class="{'disabled-row': listeningSpeakingExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="listeningSpeakingExcluded">
                         <span class="slider"></span>
@@ -659,18 +679,25 @@
                       <span class="toggle-label">{{ listeningSpeakingExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.listeningSpeaking }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="listeningSpeakingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="listeningSpeakingExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.listeningSpeaking }}</td>
+                  <td class="fw-semibold">2</td>
+                  <td>
+                    <input type="number" v-model="listeningSpeakingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="listeningSpeakingExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': listeningSpeakingNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': listeningSpeakingNoExam}">
                       <input type="number" v-model="listeningSpeakingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="listeningSpeakingExcluded || listeningSpeakingNoExam">
                       <button class="exam-toggle" :class="{'disabled': listeningSpeakingExcluded, 'active': listeningSpeakingNoExam}" @click="!listeningSpeakingExcluded && (listeningSpeakingNoExam = !listeningSpeakingNoExam)" :title="listeningSpeakingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ listeningSpeakingModuleGrade.toFixed(2) }}</td> <td rowspan="2" class="fw-bold text-primary">{{ unit2Grade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ listeningSpeakingModuleGrade.toFixed(2) }}</td>
+                  <td rowspan="2" class="fw-bold text-primary">{{ unit2Grade.toFixed(2) }}</td>
+                </tr>
                 <tr class="unit-2" :class="{'disabled-row': writingExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="writingExcluded">
                         <span class="slider"></span>
@@ -678,18 +705,24 @@
                       <span class="toggle-label">{{ writingExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.writing }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="writingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="writingExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.writing }}</td>
+                  <td class="fw-semibold">2</td>
+                  <td>
+                    <input type="number" v-model="writingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="writingExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': writingNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': writingNoExam}">
                       <input type="number" v-model="writingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="writingExcluded || writingNoExam">
                       <button class="exam-toggle" :class="{'disabled': writingExcluded, 'active': writingNoExam}" @click="!writingExcluded && (writingNoExam = !writingNoExam)" :title="writingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ writingModuleGrade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ writingModuleGrade.toFixed(2) }}</td>
+                   </tr>
                 <tr class="unit-3" :class="{'disabled-row': linguisticsPhoneticsExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="linguisticsPhoneticsExcluded">
                         <span class="slider"></span>
@@ -697,18 +730,25 @@
                       <span class="toggle-label">{{ linguisticsPhoneticsExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.linguisticsPhonetics }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="linguisticsPhoneticsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="linguisticsPhoneticsExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.linguisticsPhonetics }}</td>
+                  <td class="fw-semibold">2</td>
+                  <td>
+                    <input type="number" v-model="linguisticsPhoneticsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="linguisticsPhoneticsExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': linguisticsPhoneticsNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': linguisticsPhoneticsNoExam}">
                       <input type="number" v-model="linguisticsPhoneticsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="linguisticsPhoneticsExcluded || linguisticsPhoneticsNoExam">
                       <button class="exam-toggle" :class="{'disabled': linguisticsPhoneticsExcluded, 'active': linguisticsPhoneticsNoExam}" @click="!linguisticsPhoneticsExcluded && (linguisticsPhoneticsNoExam = !linguisticsPhoneticsNoExam)" :title="linguisticsPhoneticsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ linguisticsPhoneticsModuleGrade.toFixed(2) }}</td> <td rowspan="2" class="fw-bold text-primary">{{ unit3Grade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ linguisticsPhoneticsModuleGrade.toFixed(2) }}</td>
+                  <td rowspan="2" class="fw-bold text-primary">{{ unit3Grade.toFixed(2) }}</td>
+                </tr>
                 <tr class="unit-3" :class="{'disabled-row': grammarExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="grammarExcluded">
                         <span class="slider"></span>
@@ -716,18 +756,24 @@
                       <span class="toggle-label">{{ grammarExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.grammar }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="grammarTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="grammarExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.grammar }}</td>
+                  <td class="fw-semibold">2</td>
+                  <td>
+                    <input type="number" v-model="grammarTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="grammarExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': grammarNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': grammarNoExam}">
                       <input type="number" v-model="grammarExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="grammarExcluded || grammarNoExam">
                       <button class="exam-toggle" :class="{'disabled': grammarExcluded, 'active': grammarNoExam}" @click="!grammarExcluded && (grammarNoExam = !grammarNoExam)" :title="grammarNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ grammarModuleGrade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ grammarModuleGrade.toFixed(2) }}</td>
+                   </tr>
                 <tr class="unit-4" :class="{'disabled-row': civilisationExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="civilisationExcluded">
                         <span class="slider"></span>
@@ -735,18 +781,25 @@
                       <span class="toggle-label">{{ civilisationExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.civilisation }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="civilisationTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="civilisationExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.civilisation }}</td>
+                  <td class="fw-semibold">2</td>
+                  <td>
+                    <input type="number" v-model="civilisationTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="civilisationExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': civilisationNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': civilisationNoExam}">
                       <input type="number" v-model="civilisationExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="civilisationExcluded || civilisationNoExam">
                       <button class="exam-toggle" :class="{'disabled': civilisationExcluded, 'active': civilisationNoExam}" @click="!civilisationExcluded && (civilisationNoExam = !civilisationNoExam)" :title="civilisationNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ civilisationModuleGrade.toFixed(2) }}</td> <td class="fw-bold text-primary">{{ unit4Grade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ civilisationModuleGrade.toFixed(2) }}</td>
+                  <td class="fw-bold text-primary">{{ unit4Grade.toFixed(2) }}</td>
+                </tr>
                 <tr class="unit-4" :class="{'disabled-row': literaryTextsExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="literaryTextsExcluded">
                         <span class="slider"></span>
@@ -754,18 +807,25 @@
                       <span class="toggle-label">{{ literaryTextsExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.literaryTexts }}</td> <td class="fw-semibold">1</td> <td> <input type="number" v-model="literaryTextsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="literaryTextsExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.literaryTexts }}</td>
+                  <td class="fw-semibold">1</td>
+                  <td>
+                    <input type="number" v-model="literaryTextsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="literaryTextsExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': literaryTextsNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': literaryTextsNoExam}">
                       <input type="number" v-model="literaryTextsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="literaryTextsExcluded || literaryTextsNoExam">
-                      <button class="exam-toggle" :class="{'disabled': literaryTextsExcluded, 'active': literaryTextsNoExam}" @click="!literaryTextsExcluded && (literaryTextsNoExam = !literaryTextsNoExam)" :title="literaryTextsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                      <button class="exam-toggle" :class="{'disabled': literaryTextsExcluded, 'active': literaryTextsNoExam}" @click="!literaryTextsExcluded && (literaryTextsNoExam = !literaryTextsNoExam)" :title="literaryTextsNoAModules ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ literaryTextsModuleGrade.toFixed(2) }}</td> <td class="fw-bold text-primary">{{ unit5Grade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ literaryTextsModuleGrade.toFixed(2) }}</td>
+                  <td class="fw-bold text-primary">{{ unit5Grade.toFixed(2) }}</td>
+                </tr>
                 <tr class="unit-4" :class="{'disabled-row': foreignLanguageExcluded}">
-                  <td> <div class="toggle-container">
+                  <td>
+                    <div class="toggle-container">
                       <label class="toggle-switch">
                         <input type="checkbox" v-model="foreignLanguageExcluded">
                         <span class="slider"></span>
@@ -773,16 +833,22 @@
                       <span class="toggle-label">{{ foreignLanguageExcluded ? 'Off' : 'On' }}</span>
                     </div>
                   </td>
-                  <td class="text-start fw-medium">{{ moduleNames.foreignLanguage }}</td> <td class="fw-semibold">1</td> <td> <input type="number" v-model="foreignLanguageTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="foreignLanguageExcluded">
+                  <td class="text-start fw-medium">{{ moduleNames.foreignLanguage }}</td>
+                  <td class="fw-semibold">1</td>
+                  <td>
+                    <input type="number" v-model="foreignLanguageTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="foreignLanguageExcluded">
                   </td>
-                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': foreignLanguageNoExam}">
+                  <td>
+                    <div class="exam-toggle-container" :class="{'exam-disabled': foreignLanguageNoExam}">
                       <input type="number" v-model="foreignLanguageExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="foreignLanguageExcluded || foreignLanguageNoExam">
                       <button class="exam-toggle" :class="{'disabled': foreignLanguageExcluded, 'active': foreignLanguageNoExam}" @click="!foreignLanguageExcluded && (foreignLanguageNoExam = !foreignLanguageNoExam)" :title="foreignLanguageNoExam ? 'Enable exam grade' : 'Disable exam grade'">
                         <i class="bi bi-x-lg"></i>
                       </button>
                     </div>
                   </td>
-                  <td class="fw-semibold">{{ foreignLanguageModuleGrade.toFixed(2) }}</td> <td class="fw-bold text-primary">{{ unit6Grade.toFixed(2) }}</td> </tr>
+                  <td class="fw-semibold">{{ foreignLanguageModuleGrade.toFixed(2) }}</td>
+                  <td class="fw-bold text-primary">{{ unit6Grade.toFixed(2) }}</td>
+                </tr>
               </tbody>
             </table>
           </div>
