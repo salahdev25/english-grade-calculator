@@ -23,7 +23,7 @@ A simple and user-friendly web page to calculate grades for first and second yea
 
 ## Screenshot
 
-![Screenshot 1](eba424b7-4c55-4b94-8f15-a50239c935bb.png)
+![Screenshot 1](bd04f14f-a6ad-43b2-b5f8-809580393872.png)
 
 ---
 
