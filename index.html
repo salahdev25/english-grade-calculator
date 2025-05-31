@@ -5,353 +5,814 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>English Grade Calculator for 1st & 2nd Year LMD</title>
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Vue 3 CDN -->
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
   <style>
+    :root {
+      --primary-color: #667eea;
+      --secondary-color: #764ba2;
+      --accent-color: #f093fb;
+      --success-color: #4ecdc4;
+      --warning-color: #ffe66d;
+      --danger-color: #ff6b6b;
+      --dark-color: #2d3748;
+      --light-color: #f7fafc;
+      --text-color: #2d3748;
+      --border-color: #e2e8f0;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      --shadow-hover: 0 15px 35px rgba(0, 0, 0, 0.15);
+      --border-radius: 12px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background-color: #f8f9fa;
-      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      color: var(--text-color);
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
     }
 
-    .container {
-      max-width: 1200px;
-      margin-top: 20px;
+    .main-container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius);
+      margin: 20px;
+      padding: 30px;
+      box-shadow: var(--shadow);
       flex: 1;
     }
 
-    .custom-border-gray {
-      border-color: #6c757d !important;
-      /* Bootstrap's secondary color */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
     }
 
-    table {
-      width: 100%;
-      margin-bottom: 20px;
-      background-color: #ffffff;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    h1, h2, h3, h4 {
+      color: var(--dark-color);
+      font-weight: 700;
+      margin-bottom: 1rem;
     }
 
-    th,
-    td {
-      padding: 12px;
+    h1 {
+      font-size: 2.5rem;
       text-align: center;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
     }
 
-    th {
-      background-color: #343a40;
-      color: #000000;
-      /* Black text for column titles */
+    h3 {
+      font-size: 1.4rem;
+      text-align: center;
+      color: var(--secondary-color);
+      font-weight: 500;
     }
 
+    h4 {
+      font-size: 1.2rem;
+      text-align: center;
+      color: var(--text-color);
+      font-weight: 500;
+      margin-bottom: 2rem;
+    }
+
+    .control-card {
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border-color);
+      transition: var(--transition);
+      overflow: hidden;
+    }
+
+    .control-card:hover {
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .control-card .card-body {
+      padding: 1.25rem;
+    }
+
+    .form-select {
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background-color: white;
+    }
+
+    .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      outline: none;
+    }
+
+    /* Table Styles */
+    .table-container {
+      background: white;
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border-color);
+      margin: 2rem 0;
+    }
+
+    .table {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .table thead th {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      font-weight: 600;
+      padding: 1rem 0.75rem;
+      text-align: center;
+      border: none;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .table tbody td {
+      padding: 1rem 0.75rem;
+      text-align: center;
+      vertical-align: middle;
+      border-color: var(--border-color);
+    }
+
+    /* Unit Colors */
     .unit-1 {
-      background-color: #e3f2fd;
-      /* Light blue */
+      background-color: rgba(102, 126, 234, 0.08);
     }
 
     .unit-2 {
-      background-color: #fff3e0;
-      /* Light orange */
+      background-color: rgba(118, 75, 162, 0.08);
     }
 
     .unit-3 {
-      background-color: #e8f5e9;
-      /* Light green */
+      background-color: rgba(240, 147, 251, 0.08);
     }
 
     .unit-4 {
-      background-color: #f5f5f5;
-      /* Light gray */
+      background-color: rgba(78, 205, 196, 0.08);
     }
 
-    input {
-      width: 100%;
-      padding: 6px;
-      border: 1px solid #ced4da;
-      border-radius: 4px;
+    /* Input Styles */
+    .form-control {
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem;
       text-align: center;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      background-color: white;
     }
 
-    .result {
-      margin-top: 10px;
-      margin-bottom: 20px;
-      font-size: 1.2em;
-      font-weight: bold;
+    .form-control:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      outline: none;
+    }
+
+    .form-control:disabled {
+      background-color: #f8f9fa;
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* Toggle Styles */
+    .toggle-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 28px;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, #e2e8f0, #cbd5e0);
+      transition: var(--transition);
+      border-radius: 28px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 4px;
+      bottom: 4px;
+      background: white;
+      transition: var(--transition);
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    input:checked + .slider {
+      background: linear-gradient(135deg, var(--danger-color), #ff5252);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .toggle-label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-color);
+      min-width: 24px;
+    }
+
+    /* Exam Toggle Button */
+    .exam-toggle-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .exam-toggle {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      border-radius: 50%;
+      cursor: pointer;
+      color: var(--primary-color);
+      font-size: 1.1rem;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+    }
+
+    .exam-toggle:hover {
+      background-color: rgba(102, 126, 234, 0.1);
+      color: var(--secondary-color);
+      transform: scale(1.1);
+    }
+
+    .exam-toggle.disabled {
+      color: #cbd5e0;
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .exam-toggle.disabled:hover {
+      background-color: transparent;
+      transform: none;
+    }
+
+    .exam-toggle.active {
+      background-color: rgba(255, 107, 107, 0.1);
+      color: var(--danger-color);
+    }
+
+    /* Disabled Row Styling */
+    .disabled-row {
+      opacity: 0.5;
+    }
+
+    .disabled-row td:not(:last-child) { /* This rule might need adjustment if Unit Grade is not always the last displayable data cell before being hidden */
+      background-color: rgba(255, 107, 107, 0.05) !important;
+    }
+     /* If .disabled-row td:not(:last-child) was meant to avoid styling the unit grade cell when it's present,
+        and now unit grade is hidden by nth-child, this might need to be
+        .disabled-row td:not(:nth-child(7)) or ensure the :last-child logic for this specific styling is still appropriate.
+        However, since the row is already opaque, this detail might be minor. For now, let's keep it.
+        The primary goal is fixing the visibility of Module Grade.
+     */
+
+
+    /* Result Display */
+    .result-card {
+      background: linear-gradient(135deg, white, #f8fafc);
+      border-radius: var(--border-radius);
+      padding: 2rem;
       text-align: center;
-      color: #343a40;
+      box-shadow: var(--shadow-hover);
+      border: 2px solid transparent;
+      background-clip: padding-box;
+      position: relative;
+      margin: 2rem 0;
     }
 
-    .checkbox-label {
-      font-size: 0.9em;
-      margin-left: 5px;
+    .result-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+      border-radius: var(--border-radius);
+      padding: 2px;
+      z-index: -1;
+      margin: -2px;
     }
 
-    footer {
-      background-color: #343a40;
-      color: #ffffff;
+    .result-text {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin: 0;
+    }
+
+    .result-grade {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 0;
+    }
+
+    /* Footer */
+    .footer {
+      background: linear-gradient(135deg, var(--dark-color), #1a202c);
+      color: white;
       text-align: center;
-      padding: 15px 0;
-      margin-top: auto;
+      padding: 2rem 0;
+      margin-top: 2rem;
     }
 
-    footer a {
-      color: #ffc107;
+    .footer a {
+      color: var(--accent-color);
       text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
     }
 
-    footer a:hover {
-      text-decoration: underline;
+    .footer a:hover {
+      color: white;
+      text-shadow: 0 0 10px var(--accent-color);
     }
 
-    /* Mobile-friendly adjustments */
+    /* Mobile Responsive */
     @media (max-width: 768px) {
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        margin: 0;
+        padding: 0;
+      }
+
+      .main-container {
+        margin: 10px;
+        padding: 20px;
+        border-radius: 12px;
+      }
 
       h1 {
-        font-size: 1.4rem;
+        font-size: 1.8rem;
       }
 
       h3 {
-        font-size: 1.2rem;
-      }
-
-      h4 {
         font-size: 1.1rem;
       }
 
-      .weighting-select select {
-        width: 100%;
-        margin-top: 5px;
+      h4 {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
       }
 
-      .result {
+      .control-card .card-body {
+        padding: 1rem;
+      }
+
+      .form-select {
+        padding: 0.6rem 0.8rem;
+        font-size: 0.9rem;
+      }
+
+      .table thead th {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+      }
+
+      .table tbody td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+      }
+
+      .form-control {
+        padding: 0.6rem;
+        font-size: 0.85rem;
+      }
+
+      /* Hide Unit Grade column (7th column) on mobile */
+      .table th:nth-child(7),
+      .table td:nth-child(7) {
+        display: none;
+      }
+
+      .toggle-switch {
+        width: 44px;
+        height: 24px;
+      }
+
+      .slider:before {
+        height: 16px;
+        width: 16px;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
+
+      .exam-toggle {
+        width: 28px;
+        height: 28px;
         font-size: 1rem;
       }
 
-      th,
-      td {
-        font-size: 12px;
-        padding: 6px;
+      .result-card {
+        padding: 1.5rem;
+        margin: 1.5rem 0;
       }
 
-      input {
-        font-size: 12px;
-        padding: 5px;
+      .result-text {
+        font-size: 1.2rem;
       }
+
+      .result-grade {
+        font-size: 2rem;
+      }
+
+      .footer {
+        padding: 1.5rem 0;
+        margin-top: 1.5rem;
+      }
+    }
+
+    /* Desktop specific styles */
+    @media (min-width: 992px) {
+      .main-container {
+        margin: 30px auto;
+        max-width: 95%;
+      }
+
+      .table {
+        font-size: 1rem;
+      }
+
+      .control-card:hover {
+        transform: translateY(-3px);
+      }
+    }
+
+    /* Extra large screens */
+    @media (min-width: 1400px) {
+      .main-container {
+        max-width: 85%;
+      }
+    }
+
+    /* Animation for result */
+    .result-card {
+      animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Improved focus states */
+    .form-control:focus,
+    .form-select:focus {
+      transform: translateY(-1px);
+    }
+
+    /* Better disabled state for exam inputs */
+    .exam-disabled {
+      position: relative;
+    }
+
+    .exam-disabled::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 107, 107, 0.05));
+      border-radius: 8px;
+      pointer-events: none;
+    }
+
+    /* Better visual feedback for toggles */
+    .toggle-container:hover .slider {
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 0 10px rgba(102, 126, 234, 0.2);
     }
   </style>
 </head>
 
 <body>
   <div id="app">
-    <div class="container">
-      <h1 class="text-center">University Mohamed Khider Biskra</h1>
-      <h3 class="text-center">Department of English Language and Literature</h3>
-      <h4 class="text-center">Grade Calculator for 1st & 2nd Year LMD</h4>
+    <div class="main-container">
+      <div class="container">
+        <h1>University Mohamed Khider Biskra</h1>
+        <h3>Department of English Language and Literature</h3>
+        <h4>Grade Calculator for 1st & 2nd Year LMD</h4>
 
-      <!-- Weighting selection -->
-      <div class="weighting-select text-center mt-4 mb-3">
-        <label for="weighting">Evaluation Mode :&nbsp</label>
-        <select id="weighting" v-model="weighting" class="form-select d-inline-block w-auto">
-          <option value="40-60">40% TD - 60% Exam</option>
-          <option value="50-50">50% TD - 50% Exam</option>
-        </select>
-      </div>
-
-      <!-- Language selection -->
-      <div class="language-select text-center mt-3 mb-3">
-        <label for="language">Module Names :&nbsp</label>
-        <select id="language" v-model="language" class="form-select d-inline-block w-auto">
-          <option value="en">English</option>
-          <option value="fr">Français</option>
-        </select>
-      </div>
-
-      <!-- Notes Card -->
-      <div class="card custom-border-gray mt-3 mb-4"> <!-- Custom gray border -->
-        <div class="card-header bg-secondary text-white d-flex align-items-center">
-          <i class="bi bi-info-circle me-2"></i> <!-- Icon -->
-          <h5 class="card-title mb-0">Important Notes</h5> <!-- Title -->
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <div class="control-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <label class="mb-0 me-2 fw-semibold">Evaluation Mode:</label>
+                  <select v-model="weighting" class="form-select w-auto">
+                    <option value="40-60">40% TD - 60% Exam</option>
+                    <option value="50-50">50% TD - 50% Exam</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="control-card">
+              <div class="card-body">
+                <div class="d-flex align-items-center justify-content-between">
+                  <label class="mb-0 me-2 fw-semibold">Module Names:</label>
+                  <select v-model="language" class="form-select w-auto">
+                    <option value="en">English</option>
+                    <option value="fr">Français</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-body"> <!-- Custom light silver background -->
-          <p class="card-text">
-            <i class="bi bi-quote me-2"></i>To exclude a module you haven’t studied, check the box next to it.
-          </p>
-          <p class="card-text">
-            <i class="bi bi-quote me-2"></i>For modules that do not have an exam, insert the same TD grade.
-          </p>
+
+        <div class="table-container">
+          <div class="table-responsive">
+            <table class="table mb-0">
+              <thead>
+                <tr>
+                  <th style="width: 100px;">Status</th> <th>Module</th>                       <th style="width: 70px;">Coef</th>   <th style="width: 120px;">TD Grade</th> <th style="width: 150px;">           Exam Grade
+                    <i class="bi bi-info-circle ms-1" title="Click the X button to disable exam for a module"></i>
+                  </th>
+                  <th style="width: 120px;">Module Grade</th><th style="width: 120px;">Unit Grade</th>  </tr>
+              </thead>
+              <tbody>
+                <tr class="unit-1" :class="{'disabled-row': studySkillsExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="studySkillsExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ studySkillsExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.studySkills }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="studySkillsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="studySkillsExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': studySkillsNoExam}">
+                      <input type="number" v-model="studySkillsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="studySkillsExcluded || studySkillsNoExam">
+                      <button class="exam-toggle" :class="{'disabled': studySkillsExcluded, 'active': studySkillsNoExam}" @click="!studySkillsExcluded && (studySkillsNoExam = !studySkillsNoExam)" :title="studySkillsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ studySkillsModuleGrade.toFixed(2) }}</td> <td rowspan="3" class="fw-bold text-primary">{{ unit1Grade.toFixed(2) }}</td> </tr>
+                <tr class="unit-1" :class="{'disabled-row': readingExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="readingExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ readingExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.reading }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="readingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="readingExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': readingNoExam}">
+                      <input type="number" v-model="readingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="readingExcluded || readingNoExam">
+                      <button class="exam-toggle" :class="{'disabled': readingExcluded, 'active': readingNoExam}" @click="!readingExcluded && (readingNoExam = !readingNoExam)" :title="readingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ readingModuleGrade.toFixed(2) }}</td> </tr>
+                <tr class="unit-1" :class="{'disabled-row': ictExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="ictExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ ictExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.ict }}</td> <td class="fw-semibold">1</td> <td> <input type="number" v-model="ictTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="ictExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': ictNoExam}">
+                      <input type="number" v-model="ictExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="ictExcluded || ictNoExam">
+                      <button class="exam-toggle" :class="{'disabled': ictExcluded, 'active': ictNoExam}" @click="!ictExcluded && (ictNoExam = !ictNoExam)" :title="ictNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ ictModuleGrade.toFixed(2) }}</td> </tr>
+                <tr class="unit-2" :class="{'disabled-row': listeningSpeakingExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="listeningSpeakingExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ listeningSpeakingExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.listeningSpeaking }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="listeningSpeakingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="listeningSpeakingExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': listeningSpeakingNoExam}">
+                      <input type="number" v-model="listeningSpeakingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="listeningSpeakingExcluded || listeningSpeakingNoExam">
+                      <button class="exam-toggle" :class="{'disabled': listeningSpeakingExcluded, 'active': listeningSpeakingNoExam}" @click="!listeningSpeakingExcluded && (listeningSpeakingNoExam = !listeningSpeakingNoExam)" :title="listeningSpeakingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ listeningSpeakingModuleGrade.toFixed(2) }}</td> <td rowspan="2" class="fw-bold text-primary">{{ unit2Grade.toFixed(2) }}</td> </tr>
+                <tr class="unit-2" :class="{'disabled-row': writingExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="writingExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ writingExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.writing }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="writingTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="writingExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': writingNoExam}">
+                      <input type="number" v-model="writingExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="writingExcluded || writingNoExam">
+                      <button class="exam-toggle" :class="{'disabled': writingExcluded, 'active': writingNoExam}" @click="!writingExcluded && (writingNoExam = !writingNoExam)" :title="writingNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ writingModuleGrade.toFixed(2) }}</td> </tr>
+                <tr class="unit-3" :class="{'disabled-row': linguisticsPhoneticsExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="linguisticsPhoneticsExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ linguisticsPhoneticsExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.linguisticsPhonetics }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="linguisticsPhoneticsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="linguisticsPhoneticsExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': linguisticsPhoneticsNoExam}">
+                      <input type="number" v-model="linguisticsPhoneticsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="linguisticsPhoneticsExcluded || linguisticsPhoneticsNoExam">
+                      <button class="exam-toggle" :class="{'disabled': linguisticsPhoneticsExcluded, 'active': linguisticsPhoneticsNoExam}" @click="!linguisticsPhoneticsExcluded && (linguisticsPhoneticsNoExam = !linguisticsPhoneticsNoExam)" :title="linguisticsPhoneticsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ linguisticsPhoneticsModuleGrade.toFixed(2) }}</td> <td rowspan="2" class="fw-bold text-primary">{{ unit3Grade.toFixed(2) }}</td> </tr>
+                <tr class="unit-3" :class="{'disabled-row': grammarExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="grammarExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ grammarExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.grammar }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="grammarTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="grammarExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': grammarNoExam}">
+                      <input type="number" v-model="grammarExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="grammarExcluded || grammarNoExam">
+                      <button class="exam-toggle" :class="{'disabled': grammarExcluded, 'active': grammarNoExam}" @click="!grammarExcluded && (grammarNoExam = !grammarNoExam)" :title="grammarNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ grammarModuleGrade.toFixed(2) }}</td> </tr>
+                <tr class="unit-4" :class="{'disabled-row': civilisationExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="civilisationExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ civilisationExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.civilisation }}</td> <td class="fw-semibold">2</td> <td> <input type="number" v-model="civilisationTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="civilisationExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': civilisationNoExam}">
+                      <input type="number" v-model="civilisationExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="civilisationExcluded || civilisationNoExam">
+                      <button class="exam-toggle" :class="{'disabled': civilisationExcluded, 'active': civilisationNoExam}" @click="!civilisationExcluded && (civilisationNoExam = !civilisationNoExam)" :title="civilisationNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ civilisationModuleGrade.toFixed(2) }}</td> <td class="fw-bold text-primary">{{ unit4Grade.toFixed(2) }}</td> </tr>
+                <tr class="unit-4" :class="{'disabled-row': literaryTextsExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="literaryTextsExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ literaryTextsExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.literaryTexts }}</td> <td class="fw-semibold">1</td> <td> <input type="number" v-model="literaryTextsTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="literaryTextsExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': literaryTextsNoExam}">
+                      <input type="number" v-model="literaryTextsExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="literaryTextsExcluded || literaryTextsNoExam">
+                      <button class="exam-toggle" :class="{'disabled': literaryTextsExcluded, 'active': literaryTextsNoExam}" @click="!literaryTextsExcluded && (literaryTextsNoExam = !literaryTextsNoExam)" :title="literaryTextsNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ literaryTextsModuleGrade.toFixed(2) }}</td> <td class="fw-bold text-primary">{{ unit5Grade.toFixed(2) }}</td> </tr>
+                <tr class="unit-4" :class="{'disabled-row': foreignLanguageExcluded}">
+                  <td> <div class="toggle-container">
+                      <label class="toggle-switch">
+                        <input type="checkbox" v-model="foreignLanguageExcluded">
+                        <span class="slider"></span>
+                      </label>
+                      <span class="toggle-label">{{ foreignLanguageExcluded ? 'Off' : 'On' }}</span>
+                    </div>
+                  </td>
+                  <td class="text-start fw-medium">{{ moduleNames.foreignLanguage }}</td> <td class="fw-semibold">1</td> <td> <input type="number" v-model="foreignLanguageTD" min="0" max="20" placeholder="0-20" class="form-control" :disabled="foreignLanguageExcluded">
+                  </td>
+                  <td> <div class="exam-toggle-container" :class="{'exam-disabled': foreignLanguageNoExam}">
+                      <input type="number" v-model="foreignLanguageExam" min="0" max="20" placeholder="0-20" class="form-control" :disabled="foreignLanguageExcluded || foreignLanguageNoExam">
+                      <button class="exam-toggle" :class="{'disabled': foreignLanguageExcluded, 'active': foreignLanguageNoExam}" @click="!foreignLanguageExcluded && (foreignLanguageNoExam = !foreignLanguageNoExam)" :title="foreignLanguageNoExam ? 'Enable exam grade' : 'Disable exam grade'">
+                        <i class="bi bi-x-lg"></i>
+                      </button>
+                    </div>
+                  </td>
+                  <td class="fw-semibold">{{ foreignLanguageModuleGrade.toFixed(2) }}</td> <td class="fw-bold text-primary">{{ unit6Grade.toFixed(2) }}</td> </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
 
-      <!-- Table for input fields -->
-      <div class="table-responsive">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Module</th>
-              <th>Coef</th>
-              <th>TD Grade</th>
-              <th>Exam Grade</th>
-              <th>Module Grade</th>
-              <th>Unit Grade</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Unit 1: Study Skills, Reading, ICT -->
-            <tr class="unit-1">
-              <td><input type="checkbox" v-model="studySkillsExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.studySkills }}</td>
-              <td>2</td>
-              <td><input type="number" v-model="studySkillsTD" min="0" max="20" placeholder="0-20"
-                  :disabled="studySkillsExcluded"></td>
-              <td><input type="number" v-model="studySkillsExam" min="0" max="20" placeholder="0-20"
-                  :disabled="studySkillsExcluded"></td>
-              <td>{{ studySkillsModuleGrade.toFixed(2) }}</td>
-              <td rowspan="3">{{ unit1Grade.toFixed(2) }}</td>
-            </tr>
-            <tr class="unit-1">
-              <td><input type="checkbox" v-model="readingExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.reading }}</td>
-              <td>2</td>
-              <td><input type="number" v-model="readingTD" min="0" max="20" placeholder="0-20"
-                  :disabled="readingExcluded"></td>
-              <td><input type="number" v-model="readingExam" min="0" max="20" placeholder="0-20"
-                  :disabled="readingExcluded"></td>
-              <td>{{ readingModuleGrade.toFixed(2) }}</td>
-            </tr>
-            <tr class="unit-1">
-              <td><input type="checkbox" v-model="ictExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.ict }}</td>
-              <td>1</td>
-              <td><input type="number" v-model="ictTD" min="0" max="20" placeholder="0-20" :disabled="ictExcluded">
-              </td>
-              <td><input type="number" v-model="ictExam" min="0" max="20" placeholder="0-20" :disabled="ictExcluded">
-              </td>
-              <td>{{ ictModuleGrade.toFixed(2) }}</td>
-            </tr>
-            <!-- Unit 2: Listening & Speaking, Writing -->
-            <tr class="unit-2">
-              <td><input type="checkbox" v-model="listeningSpeakingExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.listeningSpeaking }}</td>
-              <td>2</td>
-              <td><input type="number" v-model="listeningSpeakingTD" min="0" max="20" placeholder="0-20"
-                  :disabled="listeningSpeakingExcluded"></td>
-              <td><input type="number" v-model="listeningSpeakingExam" min="0" max="20" placeholder="0-20"
-                  :disabled="listeningSpeakingExcluded"></td>
-              <td>{{ listeningSpeakingModuleGrade.toFixed(2) }}</td>
-              <td rowspan="2">{{ unit2Grade.toFixed(2) }}</td>
-            </tr>
-            <tr class="unit-2">
-              <td><input type="checkbox" v-model="writingExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.writing }}</td>
-              <td>2</td>
-              <td><input type="number" v-model="writingTD" min="0" max="20" placeholder="0-20"
-                  :disabled="writingExcluded"></td>
-              <td><input type="number" v-model="writingExam" min="0" max="20" placeholder="0-20"
-                  :disabled="writingExcluded"></td>
-              <td>{{ writingModuleGrade.toFixed(2) }}</td>
-            </tr>
-            <!-- Unit 3: Linguistics & Phonetics, Grammar -->
-            <tr class="unit-3">
-              <td><input type="checkbox" v-model="linguisticsPhoneticsExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.linguisticsPhonetics }}</td>
-              <td>2</td>
-              <td><input type="number" v-model="linguisticsPhoneticsTD" min="0" max="20" placeholder="0-20"
-                  :disabled="linguisticsPhoneticsExcluded"></td>
-              <td><input type="number" v-model="linguisticsPhoneticsExam" min="0" max="20" placeholder="0-20"
-                  :disabled="linguisticsPhoneticsExcluded"></td>
-              <td>{{ linguisticsPhoneticsModuleGrade.toFixed(2) }}</td>
-              <td rowspan="2">{{ unit3Grade.toFixed(2) }}</td>
-            </tr>
-            <tr class="unit-3">
-              <td><input type="checkbox" v-model="grammarExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.grammar }}</td>
-              <td>2</td>
-              <td><input type="number" v-model="grammarTD" min="0" max="20" placeholder="0-20"
-                  :disabled="grammarExcluded"></td>
-              <td><input type="number" v-model="grammarExam" min="0" max="20" placeholder="0-20"
-                  :disabled="grammarExcluded"></td>
-              <td>{{ grammarModuleGrade.toFixed(2) }}</td>
-            </tr>
-            <!-- Unit 4: Civilisation of the language (Individual) -->
-            <tr class="unit-4">
-              <td><input type="checkbox" v-model="civilisationExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.civilisation }}</td>
-              <td>2</td>
-              <td><input type="number" v-model="civilisationTD" min="0" max="20" placeholder="0-20"
-                  :disabled="civilisationExcluded"></td>
-              <td><input type="number" v-model="civilisationExam" min="0" max="20" placeholder="0-20"
-                  :disabled="civilisationExcluded"></td>
-              <td>{{ civilisationModuleGrade.toFixed(2) }}</td>
-              <td>{{ unit4Grade.toFixed(2) }}</td>
-            </tr>
-            <!-- Unit 5: Literary Texts (Individual) -->
-            <tr class="unit-4">
-              <td><input type="checkbox" v-model="literaryTextsExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.literaryTexts }}</td>
-              <td>1</td>
-              <td><input type="number" v-model="literaryTextsTD" min="0" max="20" placeholder="0-20"
-                  :disabled="literaryTextsExcluded"></td>
-              <td><input type="number" v-model="literaryTextsExam" min="0" max="20" placeholder="0-20"
-                  :disabled="literaryTextsExcluded"></td>
-              <td>{{ literaryTextsModuleGrade.toFixed(2) }}</td>
-              <td>{{ unit5Grade.toFixed(2) }}</td>
-            </tr>
-            <!-- Unit 6: Foreign Language (Individual) -->
-            <tr class="unit-4">
-              <td><input type="checkbox" v-model="foreignLanguageExcluded" class="form-check-input"></td>
-              <td>{{ moduleNames.foreignLanguage }}</td>
-              <td>1</td>
-              <td><input type="number" v-model="foreignLanguageTD" min="0" max="20" placeholder="0-20"
-                  :disabled="foreignLanguageExcluded"></td>
-              <td><input type="number" v-model="foreignLanguageExam" min="0" max="20" placeholder="0-20"
-                  :disabled="foreignLanguageExcluded"></td>
-              <td>{{ foreignLanguageModuleGrade.toFixed(2) }}</td>
-              <td>{{ unit6Grade.toFixed(2) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="result-card">
+          <p class="result-text">Your overall grade is:</p>
+          <p class="result-grade">{{ overallGrade.toFixed(2) }}</p>
+        </div>
 
-      <!-- Result display -->
-      <div class="result">
-        <p>Your overall grade is: <strong>{{ overallGrade.toFixed(2) }}</strong></p>
-      </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white pt-1">
+      </div> </div> <footer class="footer">
       <div class="container text-center">
         <p class="mb-0">
-          &copy; {{ currentYear }} - Designed with ❤️ by <a href="https://t.me/SalahDev" target="_blank"
-            class="text-warning text-decoration-none">Salah Dev</a>
+          &copy; {{ currentYear }} - Designed with ❤️ by <a href="https://t.me/SalahDev" target="_blank">Salah Dev</a>
         </p>
       </div>
     </footer>
-  </div>
 
-  <!-- Vue 3 Script -->
-  <script>
+  </div> <script>
     const { createApp, ref, computed } = Vue;
 
     createApp({
       setup() {
         // Language state
         const language = ref('en'); // 'en' for English, 'fr' for French
-
-        // Toggle language function
-        const toggleLanguage = () => {
-          language.value = language.value === 'en' ? 'fr' : 'en';
-        };
-
         const currentYear = computed(() => new Date().getFullYear());
 
         // Module names based on language
@@ -392,42 +853,52 @@
         const studySkillsTD = ref('');
         const studySkillsExam = ref('');
         const studySkillsExcluded = ref(false);
+        const studySkillsNoExam = ref(false);
 
         const readingTD = ref('');
         const readingExam = ref('');
         const readingExcluded = ref(false);
+        const readingNoExam = ref(false);
 
         const ictTD = ref('');
         const ictExam = ref('');
         const ictExcluded = ref(false);
+        const ictNoExam = ref(false);
 
         const listeningSpeakingTD = ref('');
         const listeningSpeakingExam = ref('');
         const listeningSpeakingExcluded = ref(false);
+        const listeningSpeakingNoExam = ref(false);
 
         const writingTD = ref('');
         const writingExam = ref('');
         const writingExcluded = ref(false);
+        const writingNoExam = ref(false);
 
         const linguisticsPhoneticsTD = ref('');
         const linguisticsPhoneticsExam = ref('');
         const linguisticsPhoneticsExcluded = ref(false);
+        const linguisticsPhoneticsNoExam = ref(false);
 
         const grammarTD = ref('');
         const grammarExam = ref('');
         const grammarExcluded = ref(false);
+        const grammarNoExam = ref(false);
 
         const civilisationTD = ref('');
         const civilisationExam = ref('');
         const civilisationExcluded = ref(false);
+        const civilisationNoExam = ref(false);
 
         const literaryTextsTD = ref('');
         const literaryTextsExam = ref('');
         const literaryTextsExcluded = ref(false);
+        const literaryTextsNoExam = ref(false);
 
         const foreignLanguageTD = ref('');
         const foreignLanguageExam = ref('');
         const foreignLanguageExcluded = ref(false);
+        const foreignLanguageNoExam = ref(false);
 
         // Coefficients
         const coefficients = {
@@ -444,24 +915,39 @@
         };
 
         // Helper function to calculate module grade
-        const calculateModuleGrade = (td, exam, Excluded) => {
-          if (Excluded) return 0; // Exclude if not studied
+        const calculateModuleGrade = (td, exam, excluded, noExam) => {
+          const tdVal = parseFloat(td) || 0;
+          const examVal = parseFloat(exam) || 0;
+
+          if (excluded) return 0; // Exclude if not studied
+          if (noExam) return tdVal; // If no exam, use TD grade only
+
           const tdWeight = weighting.value === '40-60' ? 0.4 : 0.5;
           const examWeight = weighting.value === '40-60' ? 0.6 : 0.5;
-          return (td * tdWeight) + (exam * examWeight);
+          return (tdVal * tdWeight) + (examVal * examWeight);
         };
 
         // Module grades (computed)
-        const studySkillsModuleGrade = computed(() => calculateModuleGrade(studySkillsTD.value, studySkillsExam.value, studySkillsExcluded.value));
-        const readingModuleGrade = computed(() => calculateModuleGrade(readingTD.value, readingExam.value, readingExcluded.value));
-        const ictModuleGrade = computed(() => calculateModuleGrade(ictTD.value, ictExam.value, ictExcluded.value));
-        const listeningSpeakingModuleGrade = computed(() => calculateModuleGrade(listeningSpeakingTD.value, listeningSpeakingExam.value, listeningSpeakingExcluded.value));
-        const writingModuleGrade = computed(() => calculateModuleGrade(writingTD.value, writingExam.value, writingExcluded.value));
-        const linguisticsPhoneticsModuleGrade = computed(() => calculateModuleGrade(linguisticsPhoneticsTD.value, linguisticsPhoneticsExam.value, linguisticsPhoneticsExcluded.value));
-        const grammarModuleGrade = computed(() => calculateModuleGrade(grammarTD.value, grammarExam.value, grammarExcluded.value));
-        const civilisationModuleGrade = computed(() => calculateModuleGrade(civilisationTD.value, civilisationExam.value, civilisationExcluded.value));
-        const literaryTextsModuleGrade = computed(() => calculateModuleGrade(literaryTextsTD.value, literaryTextsExam.value, literaryTextsExcluded.value));
-        const foreignLanguageModuleGrade = computed(() => calculateModuleGrade(foreignLanguageTD.value, foreignLanguageExam.value, foreignLanguageExcluded.value));
+        const studySkillsModuleGrade = computed(() => calculateModuleGrade(
+          studySkillsTD.value, studySkillsExam.value, studySkillsExcluded.value, studySkillsNoExam.value));
+        const readingModuleGrade = computed(() => calculateModuleGrade(
+          readingTD.value, readingExam.value, readingExcluded.value, readingNoExam.value));
+        const ictModuleGrade = computed(() => calculateModuleGrade(
+          ictTD.value, ictExam.value, ictExcluded.value, ictNoExam.value));
+        const listeningSpeakingModuleGrade = computed(() => calculateModuleGrade(
+          listeningSpeakingTD.value, listeningSpeakingExam.value, listeningSpeakingExcluded.value, listeningSpeakingNoExam.value));
+        const writingModuleGrade = computed(() => calculateModuleGrade(
+          writingTD.value, writingExam.value, writingExcluded.value, writingNoExam.value));
+        const linguisticsPhoneticsModuleGrade = computed(() => calculateModuleGrade(
+          linguisticsPhoneticsTD.value, linguisticsPhoneticsExam.value, linguisticsPhoneticsExcluded.value, linguisticsPhoneticsNoExam.value));
+        const grammarModuleGrade = computed(() => calculateModuleGrade(
+          grammarTD.value, grammarExam.value, grammarExcluded.value, grammarNoExam.value));
+        const civilisationModuleGrade = computed(() => calculateModuleGrade(
+          civilisationTD.value, civilisationExam.value, civilisationExcluded.value, civilisationNoExam.value));
+        const literaryTextsModuleGrade = computed(() => calculateModuleGrade(
+          literaryTextsTD.value, literaryTextsExam.value, literaryTextsExcluded.value, literaryTextsNoExam.value));
+        const foreignLanguageModuleGrade = computed(() => calculateModuleGrade(
+          foreignLanguageTD.value, foreignLanguageExam.value, foreignLanguageExcluded.value, foreignLanguageNoExam.value));
 
         // Unit grades (computed)
         const unit1Grade = computed(() => {
@@ -580,39 +1066,48 @@
 
         return {
           language,
-          toggleLanguage,
           moduleNames,
           weighting,
           studySkillsTD,
           studySkillsExam,
           studySkillsExcluded,
+          studySkillsNoExam,
           readingTD,
           readingExam,
           readingExcluded,
+          readingNoExam,
           ictTD,
           ictExam,
           ictExcluded,
+          ictNoExam,
           listeningSpeakingTD,
           listeningSpeakingExam,
           listeningSpeakingExcluded,
+          listeningSpeakingNoExam,
           writingTD,
           writingExam,
           writingExcluded,
+          writingNoExam,
           linguisticsPhoneticsTD,
           linguisticsPhoneticsExam,
           linguisticsPhoneticsExcluded,
+          linguisticsPhoneticsNoExam,
           grammarTD,
           grammarExam,
           grammarExcluded,
+          grammarNoExam,
           civilisationTD,
           civilisationExam,
           civilisationExcluded,
+          civilisationNoExam,
           literaryTextsTD,
           literaryTextsExam,
           literaryTextsExcluded,
+          literaryTextsNoExam,
           foreignLanguageTD,
           foreignLanguageExam,
           foreignLanguageExcluded,
+          foreignLanguageNoExam,
           studySkillsModuleGrade,
           readingModuleGrade,
           ictModuleGrade,
@@ -636,5 +1131,4 @@
     }).mount('#app');
   </script>
 </body>
-
 </html>
