@@ -309,16 +309,9 @@
       opacity: 0.5;
     }
 
-    .disabled-row td:not(:last-child) { /* This rule might need adjustment if Unit Grade is not always the last displayable data cell before being hidden */
+    .disabled-row td:not(:last-child) {
       background-color: rgba(255, 107, 107, 0.05) !important;
     }
-     /* If .disabled-row td:not(:last-child) was meant to avoid styling the unit grade cell when it's present,
-        and now unit grade is hidden by nth-child, this might need to be
-        .disabled-row td:not(:nth-child(7)) or ensure the :last-child logic for this specific styling is still appropriate.
-        However, since the row is already opaque, this detail might be minor. For now, let's keep it.
-        The primary goal is fixing the visibility of Module Grade.
-     */
-
 
     /* Result Display */
     .result-card {
@@ -436,7 +429,9 @@
         font-size: 0.85rem;
       }
 
-      /* Hide Unit Grade column (7th column) on mobile */
+      /* Hide Module Grade (6th) and Unit Grade (7th) columns on mobile */
+      .table th:nth-child(6),
+      .table td:nth-child(6),
       .table th:nth-child(7),
       .table td:nth-child(7) {
         display: none;
